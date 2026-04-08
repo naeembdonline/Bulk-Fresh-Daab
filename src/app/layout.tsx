@@ -9,14 +9,14 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Narkel – Premium Fresh Young Coconuts in Bulk | Direct from Noakhali Farms",
-  description: "Premium fresh young coconuts (daab) in bulk for super shops and corporate events in Dhaka. Thailand-style diamond-cut packaging. Zero middlemen.",
+  title: "Narkel – Premium Daabs. Ready to Serve.",
+  description: "Premium fresh young coconuts in bulk for super shops and corporate events in Dhaka. Direct from Noakhali farms. Modern packaging. Reliable supply.",
   icons: {
     icon: "/favicon.ico",
   },
   openGraph: {
-    title: "Narkel – Premium Fresh Young Coconuts in Bulk",
-    description: "Premium fresh young coconuts (daab) in bulk for super shops and corporate events in Dhaka. Thailand-style diamond-cut packaging. Zero middlemen.",
+    title: "Narkel – Premium Daabs. Ready to Serve.",
+    description: "Premium fresh young coconuts in bulk for super shops and corporate events in Dhaka.",
     type: "website",
   },
 };

@@ -36,9 +36,7 @@ model Quote {
   companyName   String
   contactPerson String
   phone         String
-  email         String
   quantity      String
-  eventType     String
   message       String?
   createdAt     DateTime @default(now())
 }

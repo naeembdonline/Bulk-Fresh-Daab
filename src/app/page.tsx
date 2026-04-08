@@ -2,24 +2,22 @@
 
 import { useState, useRef, useEffect, type FormEvent } from "react";
 import Image from "next/image";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
   Menu,
   TreePine,
-  Diamond,
+  Gem,
   Package,
   Truck,
   ShieldCheck,
   Sprout,
   Scissors,
-  Warehouse,
-  Star,
-  Phone,
-  Mail,
-  ChevronRight,
   CheckCircle2,
-  X,
   Send,
+  ArrowRight,
+  MessageCircle,
+  Mail,
+  MapPin,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,8 +39,11 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 
-/* ─── Fade-up animation wrapper ─── */
-function FadeIn({
+/* ───────────────────────────────────────────
+   ANIMATION HELPERS
+   ─────────────────────────────────────────── */
+
+function FadeUp({
   children,
   className,
   delay = 0,
@@ -52,13 +53,13 @@ function FadeIn({
   delay?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const inView = useInView(ref, { once: true, margin: "-60px" });
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+      initial={{ opacity: 0, y: 30 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
     >
       {children}
@@ -66,91 +67,125 @@ function FadeIn({
   );
 }
 
-/* ─── Navbar ─── */
+function ScaleIn({
+  children,
+  className,
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
+      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ───────────────────────────────────────────
+   NAVBAR
+   ─────────────────────────────────────────── */
+
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const navLinks = [
-    { label: "Home", href: "#home" },
-    { label: "For Super Shops", href: "#super-shops" },
-    { label: "For Corporates", href: "#corporates" },
-    { label: "Why Us", href: "#why-us" },
+  const links = [
+    { label: "Super Shops", href: "#super-shops" },
+    { label: "Corporate Events", href: "#corporates" },
+    { label: "Why Narkel", href: "#why-us" },
   ];
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-white/95 backdrop-blur-md shadow-sm"
-          : "bg-white"
+          ? "bg-white/90 backdrop-blur-xl shadow-[0_1px_0_0_rgba(0,0,0,0.05)]"
+          : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+        <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <a href="#home" className="flex items-center gap-2">
-            <span className="text-2xl md:text-3xl font-bold tracking-[0.2em] text-[#1A3C34]">
+          <a href="#home" className="flex items-center gap-2.5 group">
+            <div className="w-8 h-8 rounded-full bg-[#D4A017] flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+              <span className="text-white text-xs font-bold">N</span>
+            </div>
+            <span className="text-xl lg:text-2xl font-bold tracking-[0.18em] text-[#1A3C34]">
               NARKEL
             </span>
           </a>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-8" aria-label="Main navigation">
-            {navLinks.map((link) => (
+          <nav className="hidden lg:flex items-center gap-10" aria-label="Main navigation">
+            {links.map((l) => (
               <a
-                key={link.href}
-                href={link.href}
-                className="text-sm font-medium text-[#2C2C2C] hover:text-[#1A3C34] transition-colors"
+                key={l.href}
+                href={l.href}
+                className="text-[13px] font-medium tracking-wide text-[#2C2C2C]/70 hover:text-[#1A3C34] transition-colors duration-300"
               >
-                {link.label}
+                {l.label}
               </a>
             ))}
           </nav>
 
           {/* Desktop CTA */}
-          <div className="hidden md:block">
+          <div className="hidden lg:block">
             <Button
               asChild
-              className="bg-[#D4A017] hover:bg-[#c4940f] text-white rounded-full px-6 font-semibold shadow-md hover:shadow-lg transition-all"
+              className="bg-[#1A3C34] hover:bg-[#142e28] text-white rounded-full px-7 text-[13px] font-semibold tracking-wide shadow-sm hover:shadow-md transition-all duration-300 h-10"
             >
               <a href="#quote-form">Get Bulk Quote</a>
             </Button>
           </div>
 
-          {/* Mobile hamburger */}
+          {/* Mobile menu */}
           <Sheet>
-            <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon" aria-label="Open menu">
-                <Menu className="size-6" />
+            <SheetTrigger asChild className="lg:hidden">
+              <Button
+                variant="ghost"
+                size="icon"
+                className={`${scrolled ? "text-[#1A3C34]" : "text-white"}`}
+                aria-label="Open menu"
+              >
+                <Menu className="size-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-72">
+            <SheetContent side="right" className="w-80 pt-16">
               <SheetHeader>
-                <SheetTitle className="text-[#1A3C34] tracking-widest text-xl">
+                <SheetTitle className="text-[#1A3C34] tracking-[0.18em] text-lg font-bold">
                   NARKEL
                 </SheetTitle>
               </SheetHeader>
-              <nav className="flex flex-col gap-4 mt-8 px-2" aria-label="Mobile navigation">
-                {navLinks.map((link) => (
-                  <SheetClose key={link.href} asChild>
+              <nav className="flex flex-col gap-1 mt-10">
+                {links.map((l) => (
+                  <SheetClose key={l.href} asChild>
                     <a
-                      href={link.href}
-                      className="text-base font-medium text-[#2C2C2C] hover:text-[#1A3C34] transition-colors py-2 border-b border-gray-100"
+                      href={l.href}
+                      className="text-base font-medium text-[#2C2C2C]/70 hover:text-[#1A3C34] py-3 px-2 rounded-lg hover:bg-[#F5F0E8]/50 transition-all"
                     >
-                      {link.label}
+                      {l.label}
                     </a>
                   </SheetClose>
                 ))}
                 <SheetClose asChild>
                   <Button
                     asChild
-                    className="mt-4 bg-[#D4A017] hover:bg-[#c4940f] text-white rounded-full w-full font-semibold"
+                    className="mt-6 bg-[#1A3C34] hover:bg-[#142e28] text-white rounded-full w-full font-semibold h-11"
                   >
                     <a href="#quote-form">Get Bulk Quote</a>
                   </Button>
@@ -164,489 +199,472 @@ function Navbar() {
   );
 }
 
-/* ─── Hero Section ─── */
+/* ───────────────────────────────────────────
+   HERO SECTION
+   ─────────────────────────────────────────── */
+
 function HeroSection() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center overflow-hidden"
+      className="relative min-h-screen flex items-center overflow-hidden bg-[#1A3C34]"
     >
-      {/* Background image with overlay */}
+      {/* Background image */}
       <div className="absolute inset-0">
         <Image
           src="/images/hero-daab.png"
-          alt="Premium diamond-cut young coconut"
+          alt="Premium packaged young coconuts"
           fill
-          className="object-cover"
+          className="object-cover opacity-40"
           priority
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1A3C34]/95 via-[#1A3C34]/80 to-[#1A3C34]/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1A3C34]/60 via-[#1A3C34]/80 to-[#1A3C34]" />
       </div>
 
+      {/* Subtle decorative elements */}
+      <div className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full bg-[#D4A017]/5 blur-3xl" />
+      <div className="absolute bottom-1/4 left-1/4 w-64 h-64 rounded-full bg-white/5 blur-3xl" />
+
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
-        <div className="max-w-2xl">
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight"
-          >
-            Direct from{" "}
-            <span className="text-[#D4A017]">Noakhali Farms</span>{" "}
-            to Your Business
-          </motion.h1>
+      <div className="relative z-10 max-w-5xl mx-auto px-5 sm:px-8 lg:px-12 py-32 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 text-white/70 text-xs font-medium tracking-wider uppercase mb-8">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#D4A017] animate-pulse" />
+            Premium Bulk Supplier
+          </span>
+        </motion.div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-            className="mt-6 text-lg md:text-xl text-white/80 leading-relaxed"
-          >
-            Premium fresh young coconuts in bulk. Thailand-style
-            diamond-cut packaging. Zero middlemen. Guaranteed freshness
-            for super shops &amp; corporate events.
-          </motion.p>
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-[1.05] tracking-tight"
+        >
+          Premium Daabs.
+          <br />
+          <span className="text-[#D4A017]">Ready to Serve.</span>
+        </motion.h1>
 
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-6 sm:mt-8 text-base sm:text-lg text-white/50 max-w-xl mx-auto leading-relaxed font-light"
+        >
+          Fresh from our farms. Modern packaging.
+          <br className="hidden sm:block" />
+          Bulk supply you can trust.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-10 sm:mt-14 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center"
+        >
+          <Button
+            asChild
+            size="lg"
+            className="bg-[#D4A017] hover:bg-[#c49515] text-white rounded-full text-sm font-semibold px-8 h-12 shadow-lg shadow-[#D4A017]/20 hover:shadow-xl hover:shadow-[#D4A017]/30 hover:scale-[1.02] transition-all duration-300"
+          >
+            <a href="#quote-form">
+              Request Bulk Quote
+              <ArrowRight className="ml-2 size-4" />
+            </a>
+          </Button>
+          <Button
+            asChild
+            size="lg"
+            variant="outline"
+            className="border-white/20 text-white/80 rounded-full text-sm font-medium px-8 h-12 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all duration-300"
+          >
+            <a href="#super-shops">Learn More</a>
+          </Button>
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 1 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2"
+        >
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-            className="mt-10 flex flex-col sm:flex-row gap-4"
+            animate={{ y: [0, 8, 0] }}
+            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+            className="w-5 h-8 rounded-full border-2 border-white/20 flex items-start justify-center p-1.5"
           >
-            <Button
-              asChild
-              size="lg"
-              className="bg-[#D4A017] hover:bg-[#c4940f] text-[#1A3C34] rounded-full text-base md:text-lg px-8 py-6 font-bold shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
-            >
-              <a href="#quote-form">
-                Get Instant Bulk Quote
-                <ChevronRight className="ml-1 size-5" />
-              </a>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="border-2 border-white/40 text-white rounded-full text-base md:text-lg px-8 py-6 font-semibold hover:bg-white/10 hover:border-white/60 transition-all duration-300"
-            >
-              <a href="#why-us">See Pricing Options</a>
-            </Button>
+            <div className="w-1 h-1.5 rounded-full bg-white/50" />
           </motion.div>
-
-          {/* Trust badges */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.7 }}
-            className="mt-12 flex flex-wrap gap-6 text-white/70 text-sm"
-          >
-            <span className="flex items-center gap-2">
-              <CheckCircle2 className="size-4 text-[#D4A017]" />
-              1,000+ Farm Trees
-            </span>
-            <span className="flex items-center gap-2">
-              <CheckCircle2 className="size-4 text-[#D4A017]" />
-              Same-Day Delivery
-            </span>
-            <span className="flex items-center gap-2">
-              <CheckCircle2 className="size-4 text-[#D4A017]" />
-              Zero Middlemen
-            </span>
-          </motion.div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 }
 
-/* ─── For Super Shops Section ─── */
+/* ───────────────────────────────────────────
+   FOR SUPER SHOPS
+   ─────────────────────────────────────────── */
+
 function SuperShopsSection() {
   const features = [
     {
       icon: Package,
-      title: "Branded Hygiene Packaging",
-      description:
-        "Diamond-cut coconuts in branded boxes, retail-ready for your shelves. Premium presentation that attracts customers.",
+      title: "Shelf-Ready Packaging",
+      sub: "Branded boxes, retail-ready display.",
     },
     {
       icon: Truck,
-      title: "Consistent Weekly Supply",
-      description:
-        "Reliable delivery schedule tailored to your needs. Never run out of stock with our dependable supply chain.",
-    },
-    {
-      icon: Warehouse,
-      title: "Easy Display & Storage",
-      description:
-        "Optimized packaging designed for shelf display and cold storage. Stackable, space-efficient, and customer-friendly.",
-    },
-  ];
-
-  return (
-    <section id="super-shops" className="py-20 md:py-28 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Text content */}
-          <div>
-            <FadeIn>
-              <span className="text-sm font-semibold text-[#D4A017] tracking-wider uppercase">
-                For Super Shops
-              </span>
-            </FadeIn>
-            <FadeIn delay={0.1}>
-              <h2 className="mt-3 text-3xl md:text-4xl font-bold text-[#1A3C34]">
-                Elevate Your Produce Aisle with{" "}
-                <span className="relative">
-                  Premium Daab
-                  <span className="absolute -bottom-1 left-0 w-full h-1 bg-[#D4A017]/40 rounded-full" />
-                </span>
-              </h2>
-            </FadeIn>
-            <FadeIn delay={0.2}>
-              <p className="mt-4 text-[#2C2C2C]/70 text-lg leading-relaxed">
-                We supply super shops across Dhaka with fresh, diamond-cut
-                young coconuts that are branded, hygienic, and ready for
-                retail. Your customers deserve the best.
-              </p>
-            </FadeIn>
-
-            <div className="mt-10 space-y-6">
-              {features.map((feature, i) => (
-                <FadeIn key={feature.title} delay={0.1 * (i + 1)}>
-                  <div className="flex gap-4 p-4 rounded-xl border border-gray-100 hover:border-[#D4A017]/30 hover:shadow-md transition-all duration-300 bg-white">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-[#D4A017]/10 flex items-center justify-center">
-                      <feature.icon className="size-6 text-[#D4A017]" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-[#1A3C34] text-lg">
-                        {feature.title}
-                      </h3>
-                      <p className="mt-1 text-[#2C2C2C]/60 text-sm leading-relaxed">
-                        {feature.description}
-                      </p>
-                    </div>
-                  </div>
-                </FadeIn>
-              ))}
-            </div>
-          </div>
-
-          {/* Image */}
-          <FadeIn delay={0.3}>
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-              <Image
-                src="/images/super-shops.png"
-                alt="Narkel coconuts displayed in retail super shop"
-                width={600}
-                height={450}
-                className="w-full h-auto object-cover"
-              />
-              <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg px-4 py-2 text-sm font-medium text-[#1A3C34]">
-                🛒 Available at leading super shops in Dhaka
-              </div>
-            </div>
-          </FadeIn>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─── For Corporate Events Section ─── */
-function CorporateEventsSection() {
-  const features = [
-    { icon: Star, text: "Premium branded setup at your venue" },
-    { icon: Star, text: "Gold straws included for an elegant touch" },
-    { icon: Star, text: "Minimum 50 pieces per order" },
-    { icon: Star, text: "Event-day delivery guaranteed" },
-    { icon: Star, text: "Custom branding available on request" },
-  ];
-
-  return (
-    <section id="corporates" className="py-20 md:py-28 bg-[#F5F0E8]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Image */}
-          <FadeIn>
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl order-2 lg:order-1">
-              <Image
-                src="/images/corporate-events.png"
-                alt="Corporate event hydration station with Narkel coconuts"
-                width={600}
-                height={450}
-                className="w-full h-auto object-cover"
-              />
-              <div className="absolute top-4 left-4 bg-[#1A3C34] text-white rounded-lg px-4 py-2 text-sm font-medium">
-                🥥 Fresh hydration for your events
-              </div>
-            </div>
-          </FadeIn>
-
-          {/* Text content */}
-          <div className="order-1 lg:order-2">
-            <FadeIn>
-              <span className="text-sm font-semibold text-[#D4A017] tracking-wider uppercase">
-                For Corporate Events
-              </span>
-            </FadeIn>
-            <FadeIn delay={0.1}>
-              <h2 className="mt-3 text-3xl md:text-4xl font-bold text-[#1A3C34]">
-                Fresh Daab Hydration Station
-              </h2>
-            </FadeIn>
-            <FadeIn delay={0.2}>
-              <p className="mt-4 text-[#2C2C2C]/70 text-lg leading-relaxed">
-                Make your corporate events unforgettable with a premium fresh
-                coconut hydration station. Elegant, healthy, and refreshing —
-                your guests will love it.
-              </p>
-            </FadeIn>
-
-            <div className="mt-8 space-y-3">
-              {features.map((feature, i) => (
-                <FadeIn key={feature.text} delay={0.1 * (i + 1)}>
-                  <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#D4A017]/15 flex items-center justify-center mt-0.5">
-                      <feature.icon className="size-4 text-[#D4A017]" />
-                    </div>
-                    <p className="text-[#2C2C2C] text-base">{feature.text}</p>
-                  </div>
-                </FadeIn>
-              ))}
-            </div>
-
-            <FadeIn delay={0.6}>
-              <Button
-                asChild
-                className="mt-10 bg-[#1A3C34] hover:bg-[#15302a] text-white rounded-full px-8 font-semibold shadow-lg hover:shadow-xl transition-all"
-              >
-                <a href="#quote-form">
-                  Get Event Quote
-                  <ChevronRight className="ml-1 size-4" />
-                </a>
-              </Button>
-            </FadeIn>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─── Why Narkel Section ─── */
-function WhyNarkelSection() {
-  const usps = [
-    {
-      icon: TreePine,
-      title: "Own 1,000+ Trees",
-      description: "Direct farm ownership in Noakhali. Zero middlemen, best prices.",
-    },
-    {
-      icon: Diamond,
-      title: "Diamond-Cut Premium",
-      description: "Thailand-style elegant white husk cutting for premium presentation.",
-    },
-    {
-      icon: Package,
-      title: "Flexible Orders",
-      description: "From just 12 pieces to 5,000+. We handle orders of all sizes.",
-    },
-    {
-      icon: Truck,
-      title: "Dhaka Delivery",
-      description: "Same-day and next-day delivery across all of Dhaka.",
+      title: "Reliable Weekly Supply",
+      sub: "Consistent delivery, never out of stock.",
     },
     {
       icon: ShieldCheck,
-      title: "Hygiene First",
-      description: "Gloves, food-safe packaging, quality checked at every step.",
+      title: "Hygiene Certified",
+      sub: "Food-safe wrapped, quality checked.",
     },
   ];
 
   return (
-    <section id="why-us" className="py-20 md:py-28 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <FadeIn>
-          <div className="text-center max-w-2xl mx-auto">
-            <span className="text-sm font-semibold text-[#D4A017] tracking-wider uppercase">
-              Our Advantages
-            </span>
-            <h2 className="mt-3 text-3xl md:text-4xl font-bold text-[#1A3C34]">
-              Why Choose{" "}
-              <span className="relative">
-                Narkel?
-                <span className="absolute -bottom-1 left-0 w-full h-1 bg-[#D4A017]/40 rounded-full" />
-              </span>
-            </h2>
-            <p className="mt-4 text-[#2C2C2C]/70 text-lg">
-              We&apos;re not just suppliers — we&apos;re farmers committed to
-              bringing the freshest coconuts directly to your business.
-            </p>
-          </div>
-        </FadeIn>
+    <section id="super-shops" className="py-24 sm:py-32 lg:py-40 bg-white">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-20 items-center">
+          {/* Image */}
+          <ScaleIn className="order-2 lg:order-1">
+            <div className="relative rounded-2xl overflow-hidden">
+              <Image
+                src="/images/super-shops.png"
+                alt="Premium daabs in modern supermarket"
+                width={720}
+                height={480}
+                className="w-full h-auto"
+              />
+            </div>
+          </ScaleIn>
 
-        <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-          {usps.map((usp, i) => (
-            <FadeIn key={usp.title} delay={i * 0.1}>
-              <div className="group text-center p-6 rounded-2xl border border-gray-100 bg-white hover:border-[#D4A017]/30 hover:shadow-lg transition-all duration-300 h-full">
-                <div className="mx-auto w-16 h-16 rounded-full bg-[#D4A017]/10 group-hover:bg-[#D4A017]/20 flex items-center justify-center transition-colors">
-                  <usp.icon className="size-8 text-[#D4A017]" />
-                </div>
-                <h3 className="mt-4 font-bold text-[#1A3C34] text-lg">
-                  {usp.title}
-                </h3>
-                <p className="mt-2 text-[#2C2C2C]/60 text-sm leading-relaxed">
-                  {usp.description}
-                </p>
-              </div>
-            </FadeIn>
-          ))}
+          {/* Content */}
+          <div className="order-1 lg:order-2">
+            <FadeUp>
+              <span className="text-[11px] font-semibold text-[#D4A017] tracking-[0.2em] uppercase">
+                For Super Shops
+              </span>
+            </FadeUp>
+            <FadeUp delay={0.08}>
+              <h2 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1A3C34] leading-tight tracking-tight">
+                Retail-Ready
+                <br />
+                Premium Daabs
+              </h2>
+            </FadeUp>
+
+            <div className="mt-10 space-y-0">
+              {features.map((f, i) => (
+                <FadeUp key={f.title} delay={0.1 * (i + 1)}>
+                  <div className="flex items-start gap-4 py-5 border-b border-gray-100 last:border-0 group">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[#F5F0E8] flex items-center justify-center group-hover:bg-[#D4A017]/10 transition-colors duration-300">
+                      <f.icon className="size-[18px] text-[#1A3C34]" />
+                    </div>
+                    <div className="pt-1">
+                      <h3 className="text-[15px] font-semibold text-[#1A3C34]">
+                        {f.title}
+                      </h3>
+                      <p className="mt-0.5 text-sm text-[#2C2C2C]/50 font-light">
+                        {f.sub}
+                      </p>
+                    </div>
+                  </div>
+                </FadeUp>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-/* ─── How It Works Section ─── */
+/* ───────────────────────────────────────────
+   FOR CORPORATE EVENTS
+   ─────────────────────────────────────────── */
+
+function CorporateEventsSection() {
+  return (
+    <section id="corporates" className="py-24 sm:py-32 lg:py-40 bg-[#F5F0E8]">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-20 items-center">
+          {/* Content */}
+          <div>
+            <FadeUp>
+              <span className="text-[11px] font-semibold text-[#D4A017] tracking-[0.2em] uppercase">
+                Corporate Events
+              </span>
+            </FadeUp>
+            <FadeUp delay={0.08}>
+              <h2 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1A3C34] leading-tight tracking-tight">
+                Fresh Daab
+                <br />
+                Hydration Station
+              </h2>
+            </FadeUp>
+            <FadeUp delay={0.15}>
+              <p className="mt-5 text-[15px] text-[#2C2C2C]/60 leading-relaxed max-w-md font-light">
+                Premium packaged coconuts with straws, elegantly presented
+                for your corporate events. Healthy, refreshing, and
+                Instagram-worthy.
+              </p>
+            </FadeUp>
+            <FadeUp delay={0.25}>
+              <div className="mt-8 flex flex-wrap gap-3">
+                {[
+                  "Branded Setup",
+                  "Min. 50 Pcs",
+                  "Same-Day Delivery",
+                  "Gold Straws Included",
+                ].map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-4 py-2 rounded-full bg-white text-xs font-medium text-[#1A3C34]/70 border border-[#1A3C34]/5"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </FadeUp>
+            <FadeUp delay={0.35}>
+              <Button
+                asChild
+                className="mt-10 bg-[#1A3C34] hover:bg-[#142e28] text-white rounded-full px-7 text-sm font-semibold h-11 shadow-sm hover:shadow-md transition-all duration-300"
+              >
+                <a href="#quote-form">
+                  Get Event Quote
+                  <ArrowRight className="ml-2 size-4" />
+                </a>
+              </Button>
+            </FadeUp>
+          </div>
+
+          {/* Image */}
+          <ScaleIn delay={0.2}>
+            <div className="relative rounded-2xl overflow-hidden">
+              <Image
+                src="/images/corporate-events.png"
+                alt="Corporate event hydration station"
+                width={720}
+                height={480}
+                className="w-full h-auto"
+              />
+            </div>
+          </ScaleIn>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ───────────────────────────────────────────
+   WHY NARKEL
+   ─────────────────────────────────────────── */
+
+function WhyNarkelSection() {
+  const cards = [
+    {
+      icon: Sprout,
+      title: "Straight from Our Farms",
+      sub: "Direct from Noakhali. Zero middlemen.",
+    },
+    {
+      icon: Gem,
+      title: "Premium Diamond-Cut",
+      sub: "Thailand-style elegant packaging.",
+    },
+    {
+      icon: Package,
+      title: "Flexible Bulk Orders",
+      sub: "From 12 pcs to 5,000+.",
+    },
+    {
+      icon: ShieldCheck,
+      title: "Hygiene-First",
+      sub: "Wrapped, sealed, ready-to-drink.",
+    },
+  ];
+
+  return (
+    <section id="why-us" className="py-24 sm:py-32 lg:py-40 bg-white">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+        <FadeUp>
+          <div className="text-center max-w-lg mx-auto">
+            <span className="text-[11px] font-semibold text-[#D4A017] tracking-[0.2em] uppercase">
+              Why Narkel
+            </span>
+            <h2 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1A3C34] tracking-tight">
+              Built Different.
+            </h2>
+          </div>
+        </FadeUp>
+
+        <div className="mt-16 sm:mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
+          {cards.map((c, i) => (
+            <ScaleIn key={c.title} delay={i * 0.1}>
+              <div className="group p-7 sm:p-8 rounded-2xl border border-gray-100 bg-white hover:border-[#D4A017]/20 hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all duration-500 h-full">
+                <div className="w-11 h-11 rounded-xl bg-[#F5F0E8] group-hover:bg-[#D4A017]/15 flex items-center justify-center transition-colors duration-500">
+                  <c.icon className="size-5 text-[#1A3C34]" />
+                </div>
+                <h3 className="mt-5 text-base font-semibold text-[#1A3C34]">
+                  {c.title}
+                </h3>
+                <p className="mt-1.5 text-sm text-[#2C2C2C]/45 font-light leading-relaxed">
+                  {c.sub}
+                </p>
+              </div>
+            </ScaleIn>
+          ))}
+        </div>
+
+        {/* Decorative image */}
+        <FadeUp delay={0.4}>
+          <div className="mt-16 sm:mt-20 relative rounded-2xl overflow-hidden max-w-4xl mx-auto">
+            <Image
+              src="/images/packaging.png"
+              alt="Premium packaged young coconut close-up"
+              width={1024}
+              height={480}
+              className="w-full h-auto"
+            />
+          </div>
+        </FadeUp>
+      </div>
+    </section>
+  );
+}
+
+/* ───────────────────────────────────────────
+   HOW IT WORKS
+   ─────────────────────────────────────────── */
+
 function HowItWorksSection() {
   const steps = [
     {
       icon: Sprout,
-      label: "Farm",
-      title: "Harvested Fresh",
-      description: "Harvested fresh from our Noakhali farms",
+      num: "01",
+      title: "Farm Fresh",
+      sub: "Harvested from our Noakhali farms",
     },
     {
       icon: Scissors,
-      label: "Cut",
-      title: "Diamond-Cut",
-      description: "Precision diamond-cut by skilled artisans",
+      num: "02",
+      title: "Precision Cut",
+      sub: "Diamond-cut by skilled artisans",
     },
     {
       icon: Package,
-      label: "Pack",
-      title: "Hygienically Packed",
-      description: "Packed in branded boxes with food-safe materials",
+      num: "03",
+      title: "Quality Packed",
+      sub: "Wrapped, sealed & boxed",
     },
     {
       icon: Truck,
-      label: "Deliver",
-      title: "Delivered Fresh",
-      description: "Delivered fresh to your doorstep in Dhaka",
+      num: "04",
+      title: "Fast Delivery",
+      sub: "Same-day across Dhaka",
     },
   ];
 
   return (
-    <section className="py-20 md:py-28 bg-[#F5F0E8] overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <FadeIn>
-          <div className="text-center max-w-2xl mx-auto">
-            <span className="text-sm font-semibold text-[#D4A017] tracking-wider uppercase">
-              Our Process
+    <section className="py-24 sm:py-32 lg:py-40 bg-[#1A3C34] relative overflow-hidden">
+      {/* Subtle glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-[#D4A017]/5 blur-[120px]" />
+
+      <div className="relative max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+        <FadeUp>
+          <div className="text-center max-w-lg mx-auto">
+            <span className="text-[11px] font-semibold text-[#D4A017] tracking-[0.2em] uppercase">
+              How It Works
             </span>
-            <h2 className="mt-3 text-3xl md:text-4xl font-bold text-[#1A3C34]">
-              From Farm to Your Doorstep
+            <h2 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">
+              Farm to Doorstep
             </h2>
-            <p className="mt-4 text-[#2C2C2C]/70 text-lg">
-              A streamlined supply chain ensures maximum freshness every time.
-            </p>
           </div>
-        </FadeIn>
+        </FadeUp>
 
-        {/* Steps */}
-        <div className="mt-16 relative">
-          {/* Timeline line (desktop) */}
-          <div className="hidden md:block absolute top-24 left-[12%] right-[12%] h-0.5 bg-[#D4A017]/30" />
+        <div className="mt-16 sm:mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          {steps.map((s, i) => (
+            <FadeUp key={s.num} delay={i * 0.12}>
+              <div className="group text-center relative">
+                {/* Number */}
+                <span className="text-6xl sm:text-7xl font-bold text-white/[0.04] absolute -top-2 left-1/2 -translate-x-1/2 select-none">
+                  {s.num}
+                </span>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-4 relative">
-            {steps.map((step, i) => (
-              <FadeIn key={step.label} delay={i * 0.15}>
-                <div className="text-center relative">
-                  {/* Step number circle */}
-                  <div className="relative mx-auto w-20 h-20 rounded-full bg-[#1A3C34] flex items-center justify-center shadow-lg z-10">
-                    <step.icon className="size-8 text-[#D4A017]" />
-                    <span className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-[#D4A017] text-white text-xs font-bold flex items-center justify-center">
-                      {i + 1}
-                    </span>
-                  </div>
-
-                  <h3 className="mt-6 font-bold text-[#1A3C34] text-lg">
-                    {step.title}
-                  </h3>
-                  <p className="mt-2 text-[#2C2C2C]/60 text-sm max-w-[200px] mx-auto">
-                    {step.description}
-                  </p>
+                <div className="relative mx-auto w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 flex items-center justify-center group-hover:bg-[#D4A017]/20 group-hover:border-[#D4A017]/30 transition-all duration-500">
+                  <s.icon className="size-6 text-[#D4A017]" />
                 </div>
-              </FadeIn>
-            ))}
-          </div>
+
+                <h3 className="relative mt-6 text-lg font-semibold text-white">
+                  {s.title}
+                </h3>
+                <p className="relative mt-1 text-sm text-white/40 font-light">
+                  {s.sub}
+                </p>
+
+                {/* Connector line (desktop only, not last) */}
+                {i < 3 && (
+                  <div className="hidden lg:block absolute top-7 left-[60%] w-[80%] h-px bg-gradient-to-r from-white/10 to-transparent" />
+                )}
+              </div>
+            </FadeUp>
+          ))}
         </div>
 
-        {/* Decorative images */}
-        <div className="mt-16 flex justify-center gap-8 flex-wrap">
-          <FadeIn delay={0.2}>
-            <div className="relative rounded-xl overflow-hidden shadow-lg w-64 h-44">
+        {/* Decorative images row */}
+        <FadeUp delay={0.5}>
+          <div className="mt-20 grid grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto">
+            <div className="relative rounded-xl overflow-hidden aspect-[4/3]">
               <Image
                 src="/images/farm.png"
-                alt="Our coconut farm in Noakhali"
+                alt="Our farm"
                 fill
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-[#1A3C34]/30 flex items-end">
-                <p className="text-white text-sm font-medium px-4 pb-3">
-                  🌴 Our Noakhali Farm
-                </p>
-              </div>
             </div>
-          </FadeIn>
-          <FadeIn delay={0.4}>
-            <div className="relative rounded-xl overflow-hidden shadow-lg w-64 h-44">
+            <div className="relative rounded-xl overflow-hidden aspect-[4/3]">
               <Image
                 src="/images/delivery.png"
-                alt="Delivery truck in Dhaka"
+                alt="Fast delivery"
                 fill
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-[#1A3C34]/30 flex items-end">
-                <p className="text-white text-sm font-medium px-4 pb-3">
-                  🚚 Fast Dhaka Delivery
-                </p>
-              </div>
             </div>
-          </FadeIn>
-          <FadeIn delay={0.6}>
-            <div className="relative rounded-xl overflow-hidden shadow-lg w-64 h-44">
+            <div className="relative rounded-xl overflow-hidden aspect-[4/3]">
               <Image
                 src="/images/packaging.png"
-                alt="Hygienic packaging process"
+                alt="Quality packing"
                 fill
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-[#1A3C34]/30 flex items-end">
-                <p className="text-white text-sm font-medium px-4 pb-3">
-                  📦 Hygienic Packaging
-                </p>
-              </div>
             </div>
-          </FadeIn>
-        </div>
+          </div>
+        </FadeUp>
       </div>
     </section>
   );
 }
 
-/* ─── Quote Form Section ─── */
+/* ───────────────────────────────────────────
+   QUOTE FORM
+   ─────────────────────────────────────────── */
+
 function QuoteFormSection() {
-  const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState({
     companyName: "",
     contactPerson: "",
     phone: "",
-    email: "",
     quantity: "",
-    eventType: "",
     message: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -658,47 +676,40 @@ function QuoteFormSection() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((p) => ({ ...p, [name]: value }));
     if (errors[name]) {
-      setErrors((prev) => {
-        const next = { ...prev };
-        delete next[name];
-        return next;
+      setErrors((p) => {
+        const n = { ...p };
+        delete n[name];
+        return n;
       });
     }
   };
 
-  const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors((prev) => {
-        const next = { ...prev };
-        delete next[name];
-        return next;
+  const handleSelect = (val: string) => {
+    setFormData((p) => ({ ...p, quantity: val }));
+    if (errors.quantity) {
+      setErrors((p) => {
+        const n = { ...p };
+        delete n.quantity;
+        return n;
       });
     }
   };
 
-  const validate = (): boolean => {
-    const newErrors: Record<string, string> = {};
-    if (!formData.companyName.trim()) newErrors.companyName = "Company name is required";
-    if (!formData.contactPerson.trim()) newErrors.contactPerson = "Contact person is required";
-    if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email";
-    }
-    if (!formData.quantity) newErrors.quantity = "Please select a quantity range";
-    if (!formData.eventType) newErrors.eventType = "Please select an event/shop type";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  const validate = () => {
+    const e: Record<string, string> = {};
+    if (!formData.companyName.trim()) e.companyName = "Required";
+    if (!formData.contactPerson.trim()) e.contactPerson = "Required";
+    if (!formData.phone.trim()) e.phone = "Required";
+    if (!formData.quantity) e.quantity = "Required";
+    setErrors(e);
+    return Object.keys(e).length === 0;
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (ev: FormEvent) => {
+    ev.preventDefault();
     setServerError("");
-
     if (!validate()) return;
 
     setIsSubmitting(true);
@@ -708,372 +719,311 @@ function QuoteFormSection() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-
       const data = await res.json();
-
       if (data.success) {
         setIsSuccess(true);
-        setFormData({
-          companyName: "",
-          contactPerson: "",
-          phone: "",
-          email: "",
-          quantity: "",
-          eventType: "",
-          message: "",
-        });
+        setFormData({ companyName: "", contactPerson: "", phone: "", quantity: "", message: "" });
       } else if (data.errors) {
         setErrors(data.errors);
       } else {
-        setServerError(data.message || "Something went wrong. Please try again.");
+        setServerError(data.message || "Something went wrong.");
       }
     } catch {
-      setServerError("Network error. Please check your connection and try again.");
+      setServerError("Network error. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const inputClass =
-    "w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-[#2C2C2C] placeholder:text-gray-400 focus:border-[#D4A017] focus:ring-2 focus:ring-[#D4A017]/20 outline-none transition-all";
-  const errorInputClass =
-    "w-full bg-white border border-red-300 rounded-lg px-4 py-3 text-[#2C2C2C] placeholder:text-gray-400 focus:border-[#D4A017] focus:ring-2 focus:ring-[#D4A017]/20 outline-none transition-all";
+  const inputCls =
+    "w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2C2C2C] placeholder:text-gray-300 focus:border-[#D4A017] focus:ring-2 focus:ring-[#D4A017]/10 outline-none transition-all duration-300";
 
   return (
-    <section id="quote-form" className="py-20 md:py-28 bg-[#F5F0E8]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <FadeIn>
-          <div className="text-center max-w-2xl mx-auto">
-            <span className="text-sm font-semibold text-[#D4A017] tracking-wider uppercase">
+    <section id="quote-form" className="py-24 sm:py-32 lg:py-40 bg-[#F5F0E8]">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+        <FadeUp>
+          <div className="text-center max-w-lg mx-auto">
+            <span className="text-[11px] font-semibold text-[#D4A017] tracking-[0.2em] uppercase">
               Get Started
             </span>
-            <h2 className="mt-3 text-3xl md:text-4xl font-bold text-[#1A3C34]">
+            <h2 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1A3C34] tracking-tight">
               Get Your Bulk Quote
             </h2>
-            <p className="mt-4 text-[#2C2C2C]/70 text-lg">
-              Fill in the form and we&apos;ll get back to you within 2 hours
+            <p className="mt-3 text-sm text-[#2C2C2C]/50 font-light">
+              We&apos;ll respond within 2 hours.
             </p>
           </div>
-        </FadeIn>
+        </FadeUp>
 
-        <FadeIn delay={0.2}>
-          <div className="mt-12 max-w-2xl mx-auto bg-white rounded-2xl shadow-xl p-6 md:p-10">
-            {isSuccess ? (
-              <div className="text-center py-12">
-                <div className="mx-auto w-20 h-20 rounded-full bg-green-100 flex items-center justify-center">
-                  <CheckCircle2 className="size-10 text-green-600" />
-                </div>
-                <h3 className="mt-6 text-xl font-bold text-[#1A3C34]">
-                  Thank you!
-                </h3>
-                <p className="mt-2 text-[#2C2C2C]/70 text-lg">
-                  We&apos;ll contact you within 2 hours.
-                </p>
-                <Button
-                  onClick={() => setIsSuccess(false)}
-                  className="mt-8 bg-[#D4A017] hover:bg-[#c4940f] text-white rounded-full px-8 font-semibold"
-                >
-                  Submit Another Quote
-                </Button>
-              </div>
-            ) : (
-              <form ref={formRef} onSubmit={handleSubmit} noValidate className="space-y-5">
-                {/* Server error */}
-                {serverError && (
-                  <div className="flex items-center gap-2 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
-                    <X className="size-4 flex-shrink-0" />
-                    {serverError}
-                  </div>
+        <FadeUp delay={0.15}>
+          <div className="mt-12 sm:mt-16 max-w-xl mx-auto">
+            <div className="bg-white rounded-2xl shadow-[0_4px_40px_rgba(0,0,0,0.04)] p-7 sm:p-10">
+              <AnimatePresence mode="wait">
+                {isSuccess ? (
+                  <motion.div
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="text-center py-10"
+                  >
+                    <div className="mx-auto w-16 h-16 rounded-full bg-[#1A3C34] flex items-center justify-center">
+                      <CheckCircle2 className="size-8 text-[#D4A017]" />
+                    </div>
+                    <h3 className="mt-6 text-xl font-bold text-[#1A3C34]">
+                      Request Received!
+                    </h3>
+                    <p className="mt-2 text-sm text-[#2C2C2C]/50 font-light">
+                      We&apos;ll contact you within 2 hours.
+                    </p>
+                    <Button
+                      onClick={() => setIsSuccess(false)}
+                      variant="outline"
+                      className="mt-8 rounded-full text-sm font-medium h-10 px-6"
+                    >
+                      Send Another
+                    </Button>
+                  </motion.div>
+                ) : (
+                  <motion.form
+                    key="form"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    onSubmit={handleSubmit}
+                    noValidate
+                    className="space-y-4"
+                  >
+                    {serverError && (
+                      <div className="p-3 rounded-xl bg-red-50 border border-red-100 text-red-600 text-xs">
+                        {serverError}
+                      </div>
+                    )}
+
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <Label className="text-[12px] font-medium text-[#2C2C2C]/60 uppercase tracking-wider">
+                          Company / Shop Name <span className="text-red-400">*</span>
+                        </Label>
+                        <Input
+                          name="companyName"
+                          placeholder="Your business name"
+                          value={formData.companyName}
+                          onChange={handleChange}
+                          className={`${inputCls} ${errors.companyName ? "border-red-200" : ""}`}
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label className="text-[12px] font-medium text-[#2C2C2C]/60 uppercase tracking-wider">
+                          Contact Person <span className="text-red-400">*</span>
+                        </Label>
+                        <Input
+                          name="contactPerson"
+                          placeholder="Full name"
+                          value={formData.contactPerson}
+                          onChange={handleChange}
+                          className={`${inputCls} ${errors.contactPerson ? "border-red-200" : ""}`}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <Label className="text-[12px] font-medium text-[#2C2C2C]/60 uppercase tracking-wider">
+                          Phone <span className="text-red-400">*</span>
+                        </Label>
+                        <Input
+                          name="phone"
+                          type="tel"
+                          placeholder="01XXXXXXXXX"
+                          value={formData.phone}
+                          onChange={handleChange}
+                          className={`${inputCls} ${errors.phone ? "border-red-200" : ""}`}
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label className="text-[12px] font-medium text-[#2C2C2C]/60 uppercase tracking-wider">
+                          Quantity Needed <span className="text-red-400">*</span>
+                        </Label>
+                        <Select value={formData.quantity} onValueChange={handleSelect}>
+                          <SelectTrigger
+                            className={`w-full ${inputCls} h-[46px] ${errors.quantity ? "border-red-200" : ""}`}
+                          >
+                            <SelectValue placeholder="Select range" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="12-50">12 – 50 pcs</SelectItem>
+                            <SelectItem value="51-100">51 – 100 pcs</SelectItem>
+                            <SelectItem value="101-500">101 – 500 pcs</SelectItem>
+                            <SelectItem value="501-1000">501 – 1,000 pcs</SelectItem>
+                            <SelectItem value="1000+">1,000+ pcs</SelectItem>
+                            <SelectItem value="Custom">Custom</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <Label className="text-[12px] font-medium text-[#2C2C2C]/60 uppercase tracking-wider">
+                        Message
+                      </Label>
+                      <Textarea
+                        name="message"
+                        placeholder="Any special requirements..."
+                        value={formData.message}
+                        onChange={handleChange}
+                        rows={3}
+                        className={inputCls}
+                      />
+                    </div>
+
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full bg-[#1A3C34] hover:bg-[#142e28] text-white rounded-xl h-12 text-sm font-semibold mt-2 shadow-sm hover:shadow-md disabled:opacity-60 transition-all duration-300"
+                    >
+                      {isSubmitting ? (
+                        <span className="flex items-center gap-2">
+                          <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                          </svg>
+                          Sending...
+                        </span>
+                      ) : (
+                        <span className="flex items-center justify-center gap-2">
+                          <Send className="size-4" />
+                          Send Request
+                        </span>
+                      )}
+                    </Button>
+                  </motion.form>
                 )}
-
-                <div className="grid sm:grid-cols-2 gap-5">
-                  {/* Company Name */}
-                  <div className="space-y-1.5">
-                    <Label htmlFor="companyName" className="text-[#1A3C34] font-medium text-sm">
-                      Company Name <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      id="companyName"
-                      name="companyName"
-                      type="text"
-                      placeholder="Your company name"
-                      value={formData.companyName}
-                      onChange={handleChange}
-                      className={errors.companyName ? errorInputClass : inputClass}
-                    />
-                    {errors.companyName && (
-                      <p className="text-red-500 text-xs mt-1">{errors.companyName}</p>
-                    )}
-                  </div>
-
-                  {/* Contact Person */}
-                  <div className="space-y-1.5">
-                    <Label htmlFor="contactPerson" className="text-[#1A3C34] font-medium text-sm">
-                      Contact Person <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      id="contactPerson"
-                      name="contactPerson"
-                      type="text"
-                      placeholder="Your full name"
-                      value={formData.contactPerson}
-                      onChange={handleChange}
-                      className={errors.contactPerson ? errorInputClass : inputClass}
-                    />
-                    {errors.contactPerson && (
-                      <p className="text-red-500 text-xs mt-1">{errors.contactPerson}</p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="grid sm:grid-cols-2 gap-5">
-                  {/* Phone */}
-                  <div className="space-y-1.5">
-                    <Label htmlFor="phone" className="text-[#1A3C34] font-medium text-sm">
-                      Phone Number <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      id="phone"
-                      name="phone"
-                      type="tel"
-                      placeholder="01XXXXXXXXX"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className={errors.phone ? errorInputClass : inputClass}
-                    />
-                    {errors.phone && (
-                      <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
-                    )}
-                  </div>
-
-                  {/* Email */}
-                  <div className="space-y-1.5">
-                    <Label htmlFor="email" className="text-[#1A3C34] font-medium text-sm">
-                      Email Address <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="you@company.com"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className={errors.email ? errorInputClass : inputClass}
-                    />
-                    {errors.email && (
-                      <p className="text-red-500 text-xs mt-1">{errors.email}</p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="grid sm:grid-cols-2 gap-5">
-                  {/* Quantity */}
-                  <div className="space-y-1.5">
-                    <Label className="text-[#1A3C34] font-medium text-sm">
-                      Quantity Needed <span className="text-red-500">*</span>
-                    </Label>
-                    <Select
-                      value={formData.quantity}
-                      onValueChange={(v) => handleSelectChange("quantity", v)}
-                    >
-                      <SelectTrigger
-                        className={`w-full ${errors.quantity ? "border-red-300" : "border-gray-200"} bg-white`}
-                      >
-                        <SelectValue placeholder="Select quantity range" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="12-50">12 – 50 pieces</SelectItem>
-                        <SelectItem value="51-100">51 – 100 pieces</SelectItem>
-                        <SelectItem value="101-500">101 – 500 pieces</SelectItem>
-                        <SelectItem value="501-1000">501 – 1,000 pieces</SelectItem>
-                        <SelectItem value="1000+">1,000+ pieces</SelectItem>
-                        <SelectItem value="Custom">Custom quantity</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {errors.quantity && (
-                      <p className="text-red-500 text-xs mt-1">{errors.quantity}</p>
-                    )}
-                  </div>
-
-                  {/* Event Type */}
-                  <div className="space-y-1.5">
-                    <Label className="text-[#1A3C34] font-medium text-sm">
-                      Event / Shop Type <span className="text-red-500">*</span>
-                    </Label>
-                    <Select
-                      value={formData.eventType}
-                      onValueChange={(v) => handleSelectChange("eventType", v)}
-                    >
-                      <SelectTrigger
-                        className={`w-full ${errors.eventType ? "border-red-300" : "border-gray-200"} bg-white`}
-                      >
-                        <SelectValue placeholder="Select your type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Super Shop">Super Shop</SelectItem>
-                        <SelectItem value="Corporate Event">Corporate Event</SelectItem>
-                        <SelectItem value="Wedding">Wedding</SelectItem>
-                        <SelectItem value="Restaurant">Restaurant</SelectItem>
-                        <SelectItem value="Hotel">Hotel</SelectItem>
-                        <SelectItem value="Other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {errors.eventType && (
-                      <p className="text-red-500 text-xs mt-1">{errors.eventType}</p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Message */}
-                <div className="space-y-1.5">
-                  <Label htmlFor="message" className="text-[#1A3C34] font-medium text-sm">
-                    Message <span className="text-gray-400">(optional)</span>
-                  </Label>
-                  <Textarea
-                    id="message"
-                    name="message"
-                    placeholder="Any special requirements or questions..."
-                    value={formData.message}
-                    onChange={handleChange}
-                    rows={4}
-                    className={inputClass}
-                  />
-                </div>
-
-                {/* Submit */}
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-[#D4A017] hover:bg-[#c4940f] text-white rounded-lg py-3.5 text-base font-bold shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed mt-2"
-                >
-                  {isSubmitting ? (
-                    <span className="flex items-center gap-2">
-                      <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                          fill="none"
-                        />
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                        />
-                      </svg>
-                      Submitting...
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-2">
-                      <Send className="size-4" />
-                      Submit Quote Request
-                    </span>
-                  )}
-                </Button>
-              </form>
-            )}
+              </AnimatePresence>
+            </div>
           </div>
-        </FadeIn>
+        </FadeUp>
       </div>
     </section>
   );
 }
 
-/* ─── Footer ─── */
-function Footer() {
-  const quickLinks = [
-    { label: "Home", href: "#home" },
-    { label: "For Super Shops", href: "#super-shops" },
-    { label: "For Corporates", href: "#corporates" },
-    { label: "Why Us", href: "#why-us" },
-  ];
+/* ───────────────────────────────────────────
+   FOOTER
+   ─────────────────────────────────────────── */
 
+function Footer() {
   return (
     <footer className="bg-[#1A3C34] text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {/* Brand */}
-          <div>
-            <span className="text-2xl font-bold tracking-[0.2em]">
-              NARKEL
-            </span>
-            <p className="mt-4 text-white/60 text-sm leading-relaxed max-w-xs">
-              Premium fresh young coconuts direct from Noakhali farms.
-              Bringing the freshest daab to super shops and corporate
-              events across Dhaka.
+      {/* CTA band */}
+      <div className="border-b border-white/[0.06]">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20 text-center">
+          <FadeUp>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
+              Ready to order?
+            </h2>
+            <p className="mt-3 text-sm text-white/40 font-light">
+              Get your bulk quote in under 2 minutes.
             </p>
+            <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+              <Button
+                asChild
+                className="bg-[#D4A017] hover:bg-[#c49515] text-white rounded-full px-8 h-11 text-sm font-semibold shadow-lg shadow-[#D4A017]/20 hover:shadow-xl hover:shadow-[#D4A017]/30 transition-all duration-300"
+              >
+                <a href="#quote-form">
+                  Get Bulk Quote
+                  <ArrowRight className="ml-2 size-4" />
+                </a>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="border-white/15 text-white/70 rounded-full px-8 h-11 text-sm font-medium hover:bg-white/5 hover:text-white hover:border-white/25 transition-all duration-300"
+              >
+                <a
+                  href="https://wa.me/8801XXXXXXXXX"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <MessageCircle className="mr-2 size-4" />
+                  WhatsApp Us
+                </a>
+              </Button>
+            </div>
+          </FadeUp>
+        </div>
+      </div>
+
+      {/* Footer content */}
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-12 sm:py-16">
+        <div className="flex flex-col items-center text-center">
+          {/* Logo */}
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-full bg-[#D4A017] flex items-center justify-center">
+              <span className="text-white text-[10px] font-bold">N</span>
+            </div>
+            <span className="text-xl font-bold tracking-[0.18em]">NARKEL</span>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-[#D4A017] mb-4">
-              Quick Links
-            </h3>
-            <nav className="space-y-3" aria-label="Footer navigation">
-              {quickLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="block text-white/70 hover:text-white transition-colors text-sm"
-                >
-                  {link.label}
-                </a>
-              ))}
+          {/* Links */}
+          <nav className="flex flex-wrap justify-center gap-6 sm:gap-8 mt-8" aria-label="Footer navigation">
+            {[
+              { label: "Super Shops", href: "#super-shops" },
+              { label: "Corporate Events", href: "#corporates" },
+              { label: "Why Narkel", href: "#why-us" },
+              { label: "Get Quote", href: "#quote-form" },
+            ].map((l) => (
               <a
-                href="#quote-form"
-                className="block text-white/70 hover:text-white transition-colors text-sm"
+                key={l.href}
+                href={l.href}
+                className="text-sm text-white/40 hover:text-white/70 transition-colors duration-300"
               >
-                Get Bulk Quote
+                {l.label}
               </a>
-            </nav>
-          </div>
+            ))}
+          </nav>
 
           {/* Contact */}
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-[#D4A017] mb-4">
-              Contact Us
-            </h3>
-            <div className="space-y-3 text-sm text-white/70">
-              <a
-                href="https://wa.me/8801XXXXXXXXX"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 hover:text-white transition-colors"
-              >
-                <Phone className="size-4 text-[#D4A017]" />
-                +880 1XXX-XXXXXX
-              </a>
-              <a
-                href="mailto:hello@narkel.co"
-                className="flex items-center gap-3 hover:text-white transition-colors"
-              >
-                <Mail className="size-4 text-[#D4A017]" />
-                hello@narkel.co
-              </a>
-              <div className="flex items-center gap-3">
-                <Truck className="size-4 text-[#D4A017]" />
-                Dhaka, Bangladesh
-              </div>
-            </div>
+          <div className="flex flex-wrap justify-center gap-6 mt-8 text-xs text-white/30">
+            <a
+              href="https://wa.me/8801XXXXXXXXX"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 hover:text-white/50 transition-colors"
+            >
+              <MessageCircle className="size-3.5" />
+              WhatsApp
+            </a>
+            <a
+              href="mailto:hello@narkel.co"
+              className="flex items-center gap-1.5 hover:text-white/50 transition-colors"
+            >
+              <Mail className="size-3.5" />
+              hello@narkel.co
+            </a>
+            <span className="flex items-center gap-1.5">
+              <MapPin className="size-3.5" />
+              Dhaka, Bangladesh
+            </span>
           </div>
-        </div>
 
-        {/* Bottom */}
-        <div className="mt-12 pt-8 border-t border-white/10 text-center text-white/40 text-sm">
-          narkel.co &copy; {new Date().getFullYear()}. All rights reserved.
+          {/* Copyright */}
+          <div className="mt-10 pt-8 border-t border-white/[0.06] w-full">
+            <p className="text-xs text-white/20">
+              narkel.co &copy; {new Date().getFullYear()}. All rights reserved.
+            </p>
+          </div>
         </div>
       </div>
     </footer>
   );
 }
 
-/* ─── Main Page ─── */
+/* ───────────────────────────────────────────
+   MAIN PAGE
+   ─────────────────────────────────────────── */
+
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
       <main className="flex-1">
         <HeroSection />
