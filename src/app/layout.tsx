@@ -9,15 +9,24 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Fresh Daab | Bulk Young Coconut Supply in Dhaka – Narkel",
-  description: "Premium fresh young coconuts in bulk for super shops and corporate events in Dhaka. Direct from Noakhali farms. Modern packaging. Reliable supply.",
+  title:
+    "Fresh Daab | Bulk Young Coconut Supply Dhaka Bangladesh | Narkel",
+  description:
+    "Premium fresh daab (young coconut) bulk supply in Dhaka. Thailand-style diamond cut packaging for super shops and corporate events. From our farms — ready to serve. Get instant quote on WhatsApp.",
   icons: {
     icon: "/favicon.ico",
   },
   openGraph: {
-    title: "Fresh Daab | Bulk Young Coconut Supply in Dhaka – Narkel",
-    description: "Premium fresh young coconuts in bulk for super shops and corporate events in Dhaka.",
+    title:
+      "Fresh Daab | Bulk Young Coconut Supply Dhaka Bangladesh | Narkel",
+    description:
+      "Premium fresh daab (young coconut) bulk supply in Dhaka. Thailand-style diamond cut packaging for super shops and corporate events. From our farms — ready to serve.",
     type: "website",
+    siteName: "Narkel",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -28,7 +37,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} antialiased bg-background text-foreground`}>
+      <body
+        className={`${inter.variable} antialiased bg-background text-foreground`}
+      >
         {children}
         <Toaster />
       </body>

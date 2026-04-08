@@ -16,7 +16,7 @@ import {
   Send,
   ArrowRight,
   MessageCircle,
-  Mail,
+  Phone,
   MapPin,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -39,9 +39,21 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 
-/* ───────────────────────────────────────────
+/* ───────────────────────────────────────────────────────────────
+   CONSTANTS
+   ─────────────────────────────────────────────────────────────── */
+
+const WHATSAPP_NUMBER = "8801515620696";
+const WHATSAPP_QUOTE_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+  "Hi Narkel, I need bulk fresh daab quote for my super shop or corporate event. Quantity:"
+)}`;
+const WHATSAPP_FLOAT_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+  "Hi Narkel, I want bulk fresh daab quote for my business."
+)}`;
+
+/* ───────────────────────────────────────────────────────────────
    ANIMATION HELPERS
-   ─────────────────────────────────────────── */
+   ─────────────────────────────────────────────────────────────── */
 
 function FadeUp({
   children,
@@ -91,9 +103,35 @@ function ScaleIn({
   );
 }
 
-/* ───────────────────────────────────────────
+/* ───────────────────────────────────────────────────────────────
+   FLOATING WHATSAPP BUTTON
+   ─────────────────────────────────────────────────────────────── */
+
+function FloatingWhatsApp() {
+  return (
+    <motion.a
+      href={WHATSAPP_FLOAT_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat on WhatsApp"
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 2, duration: 0.5 }}
+      className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 bg-[#25D366] hover:bg-[#1da851] text-white pl-4 pr-5 py-3 rounded-full shadow-lg shadow-[#25D366]/25 hover:shadow-xl hover:shadow-[#25D366]/35 transition-all duration-300 hover:scale-105 group"
+    >
+      {/* Pulse ring */}
+      <span className="absolute -top-0.5 -left-0.5 w-3 h-3">
+        <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-40" />
+      </span>
+      <MessageCircle className="size-5 group-hover:scale-110 transition-transform duration-300" />
+      <span className="text-[13px] font-semibold hidden sm:inline">Chat on WhatsApp</span>
+    </motion.a>
+  );
+}
+
+/* ───────────────────────────────────────────────────────────────
    NAVBAR
-   ─────────────────────────────────────────── */
+   ─────────────────────────────────────────────────────────────── */
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -123,9 +161,13 @@ function Navbar() {
           {/* Logo */}
           <a href="#home" className="flex items-center gap-2.5 group">
             <div className="w-8 h-8 rounded-full bg-[#D4A017] flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
-              <span className="text-white text-xs font-bold">N</span>
+              <TreePine className="size-4 text-white" />
             </div>
-            <span className="text-xl lg:text-2xl font-bold tracking-[0.18em] text-[#1A3C34]">
+            <span
+              className={`text-xl lg:text-2xl font-bold tracking-[0.18em] ${
+                scrolled ? "text-[#1A3C34]" : "text-white"
+              } transition-colors duration-500`}
+            >
               NARKEL
             </span>
           </a>
@@ -136,7 +178,11 @@ function Navbar() {
               <a
                 key={l.href}
                 href={l.href}
-                className="text-[13px] font-medium tracking-wide text-[#2C2C2C]/70 hover:text-[#1A3C34] transition-colors duration-300"
+                className={`text-[13px] font-medium tracking-wide transition-colors duration-300 ${
+                  scrolled
+                    ? "text-[#2C2C2C]/70 hover:text-[#1A3C34]"
+                    : "text-white/70 hover:text-white"
+                }`}
               >
                 {l.label}
               </a>
@@ -149,7 +195,14 @@ function Navbar() {
               asChild
               className="bg-[#1A3C34] hover:bg-[#142e28] text-white rounded-full px-7 text-[13px] font-semibold tracking-wide shadow-sm hover:shadow-md transition-all duration-300 h-10"
             >
-              <a href="#quote-form">Get Bulk Quote</a>
+              <a
+                href={WHATSAPP_QUOTE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <MessageCircle className="mr-2 size-[14px]" />
+                Get Quote on WhatsApp
+              </a>
             </Button>
           </div>
 
@@ -159,7 +212,7 @@ function Navbar() {
               <Button
                 variant="ghost"
                 size="icon"
-                className={`${scrolled ? "text-[#1A3C34]" : "text-white"}`}
+                className={scrolled ? "text-[#1A3C34]" : "text-white"}
                 aria-label="Open menu"
               >
                 <Menu className="size-5" />
@@ -187,7 +240,14 @@ function Navbar() {
                     asChild
                     className="mt-6 bg-[#1A3C34] hover:bg-[#142e28] text-white rounded-full w-full font-semibold h-11"
                   >
-                    <a href="#quote-form">Get Bulk Quote</a>
+                    <a
+                      href={WHATSAPP_QUOTE_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <MessageCircle className="mr-2 size-4" />
+                      Get Quote on WhatsApp
+                    </a>
                   </Button>
                 </SheetClose>
               </nav>
@@ -199,9 +259,9 @@ function Navbar() {
   );
 }
 
-/* ───────────────────────────────────────────
+/* ───────────────────────────────────────────────────────────────
    HERO SECTION
-   ─────────────────────────────────────────── */
+   ─────────────────────────────────────────────────────────────── */
 
 function HeroSection() {
   const trustBadges = [
@@ -210,9 +270,6 @@ function HeroSection() {
     { icon: Package, text: "Flexible Bulk (12 to 5000+ pcs)" },
     { icon: Truck, text: "Same Day Dhaka Delivery" },
   ];
-
-  const WHATSAPP_URL =
-    "https://wa.me/8801XXXXXXXXX?text=Hi%20Narkel,%20I%20need%20bulk%20fresh%20daab%20for%20my%20shop/event.%20Quantity%3A";
 
   return (
     <section
@@ -229,7 +286,6 @@ function HeroSection() {
           priority
           sizes="100vw"
         />
-        {/* Subtle green gradient – 30-40% opacity */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#1A3C34]/50 via-[#1A3C34]/70 to-[#1A3C34]/95" />
       </div>
 
@@ -255,15 +311,17 @@ function HeroSection() {
         <motion.h1
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+          transition={{
+            duration: 0.9,
+            delay: 0.12,
+            ease: [0.22, 1, 0.36, 1],
+          }}
           className="mt-7 sm:mt-9 text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] xl:text-[4.75rem] font-bold text-white leading-[1.08] tracking-[-0.02em]"
         >
           Fresh Daab{" "}
           <span className="text-white/30 font-light mx-1">|</span>{" "}
           <br className="sm:hidden" />
-          <span className="text-[#D4A017]">
-            Bulk Young Coconut
-          </span>{" "}
+          <span className="text-[#D4A017]">Bulk Young Coconut</span>{" "}
           <br className="hidden sm:block" />
           Supply in Dhaka
         </motion.h1>
@@ -272,18 +330,27 @@ function HeroSection() {
         <motion.p
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
+          transition={{
+            duration: 0.9,
+            delay: 0.28,
+            ease: [0.22, 1, 0.36, 1],
+          }}
           className="mt-5 sm:mt-7 text-base sm:text-[17px] lg:text-lg text-white/45 max-w-2xl mx-auto leading-relaxed font-light"
         >
           Premium packaged fresh daab straight from our farms. Ready-to-serve
-          for super shops, corporate events &amp; hydration stations in Bangladesh.
+          for super shops, corporate events &amp; hydration stations across
+          Bangladesh.
         </motion.p>
 
         {/* ── CTAs ── */}
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.44, ease: [0.22, 1, 0.36, 1] }}
+          transition={{
+            duration: 0.9,
+            delay: 0.44,
+            ease: [0.22, 1, 0.36, 1],
+          }}
           className="mt-9 sm:mt-12 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center"
         >
           {/* Primary – WhatsApp */}
@@ -292,7 +359,11 @@ function HeroSection() {
             size="lg"
             className="bg-[#1A3C34] hover:bg-[#142e28] text-white rounded-full text-sm font-semibold px-7 sm:px-9 h-12 sm:h-[52px] shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 hover:scale-[1.02] transition-all duration-300 border border-white/[0.12]"
           >
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+            <a
+              href={WHATSAPP_QUOTE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <MessageCircle className="mr-2.5 size-[18px]" />
               Get Bulk Quote on WhatsApp
             </a>
@@ -305,15 +376,19 @@ function HeroSection() {
             variant="outline"
             className="bg-white/[0.06] border-white/[0.15] text-white/85 hover:bg-white/[0.12] hover:border-white/25 hover:text-white rounded-full text-sm font-medium px-7 sm:px-9 h-12 sm:h-[52px] backdrop-blur-sm transition-all duration-300"
           >
-            <a href="#quote-form">Fill Quick Form Below</a>
+            <a href="#quote-form">Fill Quick Form</a>
           </Button>
         </motion.div>
 
-        {/* ── Trust badges ── */}
+        {/* ── Trust badges with gold icons ── */}
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          transition={{
+            duration: 0.9,
+            delay: 0.6,
+            ease: [0.22, 1, 0.36, 1],
+          }}
           className="mt-12 sm:mt-16 flex flex-wrap justify-center gap-x-6 gap-y-3 sm:gap-x-8"
         >
           {trustBadges.map((b) => (
@@ -327,15 +402,25 @@ function HeroSection() {
           ))}
         </motion.div>
 
+        {/* ── Trust line ── */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7, duration: 1 }}
+          className="mt-6 text-[11px] sm:text-xs text-white/30 tracking-wide font-light"
+        >
+          From Our Farms &bull; Hygiene First &bull; Same Day Dhaka Delivery
+        </motion.p>
+
         {/* ── Local SEO micro-copy ── */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.9, duration: 1 }}
-          className="mt-10 sm:mt-12 text-[10px] sm:text-[11px] text-white/20 tracking-wide font-light"
+          className="mt-4 text-[10px] sm:text-[11px] text-white/20 tracking-wide font-light"
         >
-          Fresh Daab Dhaka &bull; Bulk Daab Supply Bangladesh &bull; Young Coconut
-          for Super Shops &amp; Corporate Events
+          Fresh Daab Dhaka &bull; Bulk Daab Supply Bangladesh &bull; Young
+          Coconut for Super Shops &amp; Corporate Events
         </motion.p>
       </div>
 
@@ -363,26 +448,26 @@ function HeroSection() {
   );
 }
 
-/* ───────────────────────────────────────────
+/* ───────────────────────────────────────────────────────────────
    FOR SUPER SHOPS
-   ─────────────────────────────────────────── */
+   ─────────────────────────────────────────────────────────────── */
 
 function SuperShopsSection() {
   const features = [
     {
       icon: Package,
       title: "Shelf-Ready Packaging",
-      sub: "Branded boxes, retail-ready display.",
+      sub: "Branded boxes, retail-ready display. Perfect for fresh daab super shops.",
     },
     {
       icon: Truck,
       title: "Reliable Weekly Supply",
-      sub: "Consistent delivery, never out of stock.",
+      sub: "Consistent delivery, never out of stock. Bulk daab Dhaka made easy.",
     },
     {
       icon: ShieldCheck,
       title: "Hygiene Certified",
-      sub: "Food-safe wrapped, quality checked.",
+      sub: "Food-safe wrapped, quality checked. Premium daab supply you can trust.",
     },
   ];
 
@@ -395,7 +480,7 @@ function SuperShopsSection() {
             <div className="relative rounded-2xl overflow-hidden">
               <Image
                 src="/images/super-shops.png"
-                alt="Premium daabs in modern supermarket"
+                alt="Premium fresh daab displayed in modern supermarket produce section – bulk daab supply for super shops in Dhaka"
                 width={720}
                 height={480}
                 className="w-full h-auto"
@@ -414,8 +499,14 @@ function SuperShopsSection() {
               <h2 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1A3C34] leading-tight tracking-tight">
                 Retail-Ready
                 <br />
-                Premium Daabs
+                Premium Fresh Daab
               </h2>
+            </FadeUp>
+            <FadeUp delay={0.14}>
+              <p className="mt-4 text-[15px] text-[#2C2C2C]/60 leading-relaxed max-w-md font-light">
+                Stock your shelves with Thailand-style premium packaged young
+                coconuts. Your customers will love the ready-to-drink convenience.
+              </p>
             </FadeUp>
 
             <div className="mt-10 space-y-0">
@@ -444,9 +535,9 @@ function SuperShopsSection() {
   );
 }
 
-/* ───────────────────────────────────────────
+/* ───────────────────────────────────────────────────────────────
    FOR CORPORATE EVENTS
-   ─────────────────────────────────────────── */
+   ─────────────────────────────────────────────────────────────── */
 
 function CorporateEventsSection() {
   return (
@@ -469,9 +560,9 @@ function CorporateEventsSection() {
             </FadeUp>
             <FadeUp delay={0.15}>
               <p className="mt-5 text-[15px] text-[#2C2C2C]/60 leading-relaxed max-w-md font-light">
-                Premium packaged coconuts with straws, elegantly presented
-                for your corporate events. Healthy, refreshing, and
-                Instagram-worthy.
+                Create an Instagram-worthy daab hydration station for your
+                corporate events. Premium young coconut Bangladesh — elegantly
+                presented with gold straws and branded setup.
               </p>
             </FadeUp>
             <FadeUp delay={0.25}>
@@ -496,7 +587,11 @@ function CorporateEventsSection() {
                 asChild
                 className="mt-10 bg-[#1A3C34] hover:bg-[#142e28] text-white rounded-full px-7 text-sm font-semibold h-11 shadow-sm hover:shadow-md transition-all duration-300"
               >
-                <a href="#quote-form">
+                <a
+                  href={WHATSAPP_QUOTE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Get Event Quote
                   <ArrowRight className="ml-2 size-4" />
                 </a>
@@ -509,7 +604,7 @@ function CorporateEventsSection() {
             <div className="relative rounded-2xl overflow-hidden">
               <Image
                 src="/images/corporate-events.png"
-                alt="Corporate event hydration station"
+                alt="Elegant daab hydration station at corporate event – fresh daab for corporate events Bangladesh"
                 width={720}
                 height={480}
                 className="w-full h-auto"
@@ -522,31 +617,31 @@ function CorporateEventsSection() {
   );
 }
 
-/* ───────────────────────────────────────────
+/* ───────────────────────────────────────────────────────────────
    WHY NARKEL
-   ─────────────────────────────────────────── */
+   ─────────────────────────────────────────────────────────────── */
 
 function WhyNarkelSection() {
   const cards = [
     {
       icon: Sprout,
       title: "Straight from Our Farms",
-      sub: "Direct from Noakhali. Zero middlemen.",
+      sub: "Direct from Noakhali. Zero middlemen. Fresh daab Bangladesh at its finest.",
     },
     {
       icon: Gem,
       title: "Premium Diamond-Cut",
-      sub: "Thailand-style elegant packaging.",
+      sub: "Thailand-style elegant packaging. Luxury young coconut presentation.",
     },
     {
       icon: Package,
       title: "Flexible Bulk Orders",
-      sub: "From 12 pcs to 5,000+.",
+      sub: "From 12 pcs to 5,000+. Bulk daab Dhaka for any business size.",
     },
     {
       icon: ShieldCheck,
       title: "Hygiene-First",
-      sub: "Wrapped, sealed, ready-to-drink.",
+      sub: "Wrapped, sealed, ready-to-drink. Premium daab supply you can trust.",
     },
   ];
 
@@ -561,6 +656,10 @@ function WhyNarkelSection() {
             <h2 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1A3C34] tracking-tight">
               Built Different.
             </h2>
+            <p className="mt-4 text-sm text-[#2C2C2C]/50 font-light max-w-md mx-auto">
+              Narkel delivers the freshest young coconut Bangladesh has to offer —
+              from our farms to your doorstep, with world-class packaging.
+            </p>
           </div>
         </FadeUp>
 
@@ -587,7 +686,7 @@ function WhyNarkelSection() {
           <div className="mt-16 sm:mt-20 relative rounded-2xl overflow-hidden max-w-4xl mx-auto">
             <Image
               src="/images/packaging.png"
-              alt="Premium packaged young coconut close-up"
+              alt="Premium packaged young coconut close-up – Thailand-style diamond cut packaging with plastic wrap"
               width={1024}
               height={480}
               className="w-full h-auto"
@@ -599,9 +698,9 @@ function WhyNarkelSection() {
   );
 }
 
-/* ───────────────────────────────────────────
+/* ───────────────────────────────────────────────────────────────
    HOW IT WORKS
-   ─────────────────────────────────────────── */
+   ─────────────────────────────────────────────────────────────── */
 
 function HowItWorksSection() {
   const steps = [
@@ -645,6 +744,10 @@ function HowItWorksSection() {
             <h2 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">
               Farm to Doorstep
             </h2>
+            <p className="mt-4 text-sm text-white/40 font-light max-w-md mx-auto">
+              From harvesting to delivery — our fresh daab supply process is
+              designed for quality and speed.
+            </p>
           </div>
         </FadeUp>
 
@@ -683,7 +786,7 @@ function HowItWorksSection() {
             <div className="relative rounded-xl overflow-hidden aspect-[4/3]">
               <Image
                 src="/images/farm.png"
-                alt="Our farm"
+                alt="Our coconut farm in Noakhali"
                 fill
                 className="object-cover"
               />
@@ -691,7 +794,7 @@ function HowItWorksSection() {
             <div className="relative rounded-xl overflow-hidden aspect-[4/3]">
               <Image
                 src="/images/delivery.png"
-                alt="Fast delivery"
+                alt="Fast delivery across Dhaka"
                 fill
                 className="object-cover"
               />
@@ -699,7 +802,7 @@ function HowItWorksSection() {
             <div className="relative rounded-xl overflow-hidden aspect-[4/3]">
               <Image
                 src="/images/packaging.png"
-                alt="Quality packing"
+                alt="Quality packing process"
                 fill
                 className="object-cover"
               />
@@ -711,9 +814,9 @@ function HowItWorksSection() {
   );
 }
 
-/* ───────────────────────────────────────────
+/* ───────────────────────────────────────────────────────────────
    QUOTE FORM
-   ─────────────────────────────────────────── */
+   ─────────────────────────────────────────────────────────────── */
 
 function QuoteFormSection() {
   const [formData, setFormData] = useState({
@@ -778,7 +881,13 @@ function QuoteFormSection() {
       const data = await res.json();
       if (data.success) {
         setIsSuccess(true);
-        setFormData({ companyName: "", contactPerson: "", phone: "", quantity: "", message: "" });
+        setFormData({
+          companyName: "",
+          contactPerson: "",
+          phone: "",
+          quantity: "",
+          message: "",
+        });
       } else if (data.errors) {
         setErrors(data.errors);
       } else {
@@ -806,7 +915,7 @@ function QuoteFormSection() {
               Get Your Bulk Quote
             </h2>
             <p className="mt-3 text-sm text-[#2C2C2C]/50 font-light">
-              We&apos;ll respond within 2 hours.
+              We&apos;ll respond within 2 hours. Or get an instant quote on WhatsApp.
             </p>
           </div>
         </FadeUp>
@@ -857,26 +966,32 @@ function QuoteFormSection() {
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
                         <Label className="text-[12px] font-medium text-[#2C2C2C]/60 uppercase tracking-wider">
-                          Company / Shop Name <span className="text-red-400">*</span>
+                          Company / Shop Name{" "}
+                          <span className="text-red-400">*</span>
                         </Label>
                         <Input
                           name="companyName"
                           placeholder="Your business name"
                           value={formData.companyName}
                           onChange={handleChange}
-                          className={`${inputCls} ${errors.companyName ? "border-red-200" : ""}`}
+                          className={`${inputCls} ${
+                            errors.companyName ? "border-red-200" : ""
+                          }`}
                         />
                       </div>
                       <div className="space-y-1.5">
                         <Label className="text-[12px] font-medium text-[#2C2C2C]/60 uppercase tracking-wider">
-                          Contact Person <span className="text-red-400">*</span>
+                          Contact Person{" "}
+                          <span className="text-red-400">*</span>
                         </Label>
                         <Input
                           name="contactPerson"
                           placeholder="Full name"
                           value={formData.contactPerson}
                           onChange={handleChange}
-                          className={`${inputCls} ${errors.contactPerson ? "border-red-200" : ""}`}
+                          className={`${inputCls} ${
+                            errors.contactPerson ? "border-red-200" : ""
+                          }`}
                         />
                       </div>
                     </div>
@@ -892,24 +1007,36 @@ function QuoteFormSection() {
                           placeholder="01XXXXXXXXX"
                           value={formData.phone}
                           onChange={handleChange}
-                          className={`${inputCls} ${errors.phone ? "border-red-200" : ""}`}
+                          className={`${inputCls} ${
+                            errors.phone ? "border-red-200" : ""
+                          }`}
                         />
                       </div>
                       <div className="space-y-1.5">
                         <Label className="text-[12px] font-medium text-[#2C2C2C]/60 uppercase tracking-wider">
-                          Quantity Needed <span className="text-red-400">*</span>
+                          Quantity Needed{" "}
+                          <span className="text-red-400">*</span>
                         </Label>
-                        <Select value={formData.quantity} onValueChange={handleSelect}>
+                        <Select
+                          value={formData.quantity}
+                          onValueChange={handleSelect}
+                        >
                           <SelectTrigger
-                            className={`w-full ${inputCls} h-[46px] ${errors.quantity ? "border-red-200" : ""}`}
+                            className={`w-full ${inputCls} h-[46px] ${
+                              errors.quantity ? "border-red-200" : ""
+                            }`}
                           >
                             <SelectValue placeholder="Select range" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="12-50">12 – 50 pcs</SelectItem>
                             <SelectItem value="51-100">51 – 100 pcs</SelectItem>
-                            <SelectItem value="101-500">101 – 500 pcs</SelectItem>
-                            <SelectItem value="501-1000">501 – 1,000 pcs</SelectItem>
+                            <SelectItem value="101-500">
+                              101 – 500 pcs
+                            </SelectItem>
+                            <SelectItem value="501-1000">
+                              501 – 1,000 pcs
+                            </SelectItem>
                             <SelectItem value="1000+">1,000+ pcs</SelectItem>
                             <SelectItem value="Custom">Custom</SelectItem>
                           </SelectContent>
@@ -938,9 +1065,24 @@ function QuoteFormSection() {
                     >
                       {isSubmitting ? (
                         <span className="flex items-center gap-2">
-                          <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                          <svg
+                            className="animate-spin h-4 w-4"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                              fill="none"
+                            />
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                            />
                           </svg>
                           Sending...
                         </span>
@@ -962,9 +1104,9 @@ function QuoteFormSection() {
   );
 }
 
-/* ───────────────────────────────────────────
+/* ───────────────────────────────────────────────────────────────
    FOOTER
-   ─────────────────────────────────────────── */
+   ─────────────────────────────────────────────────────────────── */
 
 function Footer() {
   return (
@@ -995,7 +1137,7 @@ function Footer() {
                 className="border-white/15 text-white/70 rounded-full px-8 h-11 text-sm font-medium hover:bg-white/5 hover:text-white hover:border-white/25 transition-all duration-300"
               >
                 <a
-                  href="https://wa.me/8801XXXXXXXXX"
+                  href={WHATSAPP_FLOAT_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -1014,13 +1156,16 @@ function Footer() {
           {/* Logo */}
           <div className="flex items-center gap-2.5">
             <div className="w-7 h-7 rounded-full bg-[#D4A017] flex items-center justify-center">
-              <span className="text-white text-[10px] font-bold">N</span>
+              <TreePine className="size-3.5 text-white" />
             </div>
             <span className="text-xl font-bold tracking-[0.18em]">NARKEL</span>
           </div>
 
           {/* Links */}
-          <nav className="flex flex-wrap justify-center gap-6 sm:gap-8 mt-8" aria-label="Footer navigation">
+          <nav
+            className="flex flex-wrap justify-center gap-6 sm:gap-8 mt-8"
+            aria-label="Footer navigation"
+          >
             {[
               { label: "Super Shops", href: "#super-shops" },
               { label: "Corporate Events", href: "#corporates" },
@@ -1040,31 +1185,25 @@ function Footer() {
           {/* Contact */}
           <div className="flex flex-wrap justify-center gap-6 mt-8 text-xs text-white/30">
             <a
-              href="https://wa.me/8801XXXXXXXXX"
+              href={WHATSAPP_FLOAT_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 hover:text-white/50 transition-colors"
+              className="flex items-center gap-1.5 hover:text-white/50 transition-colors duration-300"
             >
-              <MessageCircle className="size-3.5" />
+              <Phone className="size-3" />
               WhatsApp
             </a>
-            <a
-              href="mailto:hello@narkel.co"
-              className="flex items-center gap-1.5 hover:text-white/50 transition-colors"
-            >
-              <Mail className="size-3.5" />
-              hello@narkel.co
-            </a>
             <span className="flex items-center gap-1.5">
-              <MapPin className="size-3.5" />
+              <MapPin className="size-3" />
               Dhaka, Bangladesh
             </span>
           </div>
 
           {/* Copyright */}
           <div className="mt-10 pt-8 border-t border-white/[0.06] w-full">
-            <p className="text-xs text-white/20">
-              narkel.co &copy; {new Date().getFullYear()}. All rights reserved.
+            <p className="text-xs text-white/25">
+              narkel.co &copy; {new Date().getFullYear()} &mdash; Premium Fresh
+              Daab Supply Bangladesh
             </p>
           </div>
         </div>
@@ -1073,13 +1212,13 @@ function Footer() {
   );
 }
 
-/* ───────────────────────────────────────────
+/* ───────────────────────────────────────────────────────────────
    MAIN PAGE
-   ─────────────────────────────────────────── */
+   ─────────────────────────────────────────────────────────────── */
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">
         <HeroSection />
@@ -1090,6 +1229,7 @@ export default function HomePage() {
         <QuoteFormSection />
       </main>
       <Footer />
+      <FloatingWhatsApp />
     </div>
   );
 }
