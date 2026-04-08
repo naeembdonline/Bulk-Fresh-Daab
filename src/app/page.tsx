@@ -204,105 +204,161 @@ function Navbar() {
    ─────────────────────────────────────────── */
 
 function HeroSection() {
+  const trustBadges = [
+    { icon: Sprout, text: "From Our Farms" },
+    { icon: Gem, text: "Premium Diamond Cut Packaging" },
+    { icon: Package, text: "Flexible Bulk (12 to 5000+ pcs)" },
+    { icon: Truck, text: "Same Day Dhaka Delivery" },
+  ];
+
+  const WHATSAPP_URL =
+    "https://wa.me/8801XXXXXXXXX?text=Hi%20Narkel,%20I%20need%20bulk%20fresh%20daab%20for%20my%20shop/event.%20Quantity%3A";
+
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center overflow-hidden bg-[#1A3C34]"
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#1A3C34]"
     >
-      {/* Background image */}
+      {/* ── Background image + overlay ── */}
       <div className="absolute inset-0">
         <Image
           src="/images/hero-daab.png"
-          alt="Premium packaged young coconuts"
+          alt="Premium packaged diamond-cut fresh daab with plastic wrap and straw in cardboard box – bulk supply Bangladesh"
           fill
-          className="object-cover opacity-40"
+          className="object-cover object-center opacity-[0.35]"
           priority
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1A3C34]/60 via-[#1A3C34]/80 to-[#1A3C34]" />
+        {/* Subtle green gradient – 30-40% opacity */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1A3C34]/50 via-[#1A3C34]/70 to-[#1A3C34]/95" />
       </div>
 
-      {/* Subtle decorative elements */}
-      <div className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full bg-[#D4A017]/5 blur-3xl" />
-      <div className="absolute bottom-1/4 left-1/4 w-64 h-64 rounded-full bg-white/5 blur-3xl" />
+      {/* ── Ambient glow orbs ── */}
+      <div className="absolute top-1/3 right-[15%] w-[500px] h-[500px] rounded-full bg-[#D4A017]/[0.04] blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-1/4 left-[10%] w-[350px] h-[350px] rounded-full bg-white/[0.03] blur-[80px] pointer-events-none" />
 
-      {/* Content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-5 sm:px-8 lg:px-12 py-32 text-center">
+      {/* ── Main content ── */}
+      <div className="relative z-10 w-full max-w-4xl mx-auto px-5 sm:px-8 lg:px-12 pt-28 sm:pt-32 pb-12 text-center">
+        {/* Badge */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
         >
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 text-white/70 text-xs font-medium tracking-wider uppercase mb-8">
+          <span className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-white/[0.07] backdrop-blur-md border border-white/[0.08] text-white/60 text-[11px] font-medium tracking-[0.18em] uppercase">
             <span className="w-1.5 h-1.5 rounded-full bg-[#D4A017] animate-pulse" />
-            Premium Bulk Supplier
+            Trusted by Super Shops &amp; Corporates
           </span>
         </motion.div>
 
+        {/* H1 – SEO rich */}
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-[1.05] tracking-tight"
+          transition={{ duration: 0.9, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-7 sm:mt-9 text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] xl:text-[4.75rem] font-bold text-white leading-[1.08] tracking-[-0.02em]"
         >
-          Premium Daabs.
-          <br />
-          <span className="text-[#D4A017]">Ready to Serve.</span>
+          Fresh Daab{" "}
+          <span className="text-white/30 font-light mx-1">|</span>{" "}
+          <br className="sm:hidden" />
+          <span className="text-[#D4A017]">
+            Bulk Young Coconut
+          </span>{" "}
+          <br className="hidden sm:block" />
+          Supply in Dhaka
         </motion.h1>
 
+        {/* Subheadline – benefit-driven */}
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-6 sm:mt-8 text-base sm:text-lg text-white/50 max-w-xl mx-auto leading-relaxed font-light"
+          transition={{ duration: 0.9, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-5 sm:mt-7 text-base sm:text-[17px] lg:text-lg text-white/45 max-w-2xl mx-auto leading-relaxed font-light"
         >
-          Fresh from our farms. Modern packaging.
-          <br className="hidden sm:block" />
-          Bulk supply you can trust.
+          Premium packaged fresh daab straight from our farms. Ready-to-serve
+          for super shops, corporate events &amp; hydration stations in Bangladesh.
         </motion.p>
 
+        {/* ── CTAs ── */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-10 sm:mt-14 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center"
+          transition={{ duration: 0.9, delay: 0.44, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-9 sm:mt-12 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center"
         >
+          {/* Primary – WhatsApp */}
           <Button
             asChild
             size="lg"
-            className="bg-[#D4A017] hover:bg-[#c49515] text-white rounded-full text-sm font-semibold px-8 h-12 shadow-lg shadow-[#D4A017]/20 hover:shadow-xl hover:shadow-[#D4A017]/30 hover:scale-[1.02] transition-all duration-300"
+            className="bg-[#1A3C34] hover:bg-[#142e28] text-white rounded-full text-sm font-semibold px-7 sm:px-9 h-12 sm:h-[52px] shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 hover:scale-[1.02] transition-all duration-300 border border-white/[0.12]"
           >
-            <a href="#quote-form">
-              Request Bulk Quote
-              <ArrowRight className="ml-2 size-4" />
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+              <MessageCircle className="mr-2.5 size-[18px]" />
+              Get Bulk Quote on WhatsApp
             </a>
           </Button>
+
+          {/* Secondary – Scroll to form */}
           <Button
             asChild
             size="lg"
             variant="outline"
-            className="border-white/20 text-white/80 rounded-full text-sm font-medium px-8 h-12 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all duration-300"
+            className="bg-white/[0.06] border-white/[0.15] text-white/85 hover:bg-white/[0.12] hover:border-white/25 hover:text-white rounded-full text-sm font-medium px-7 sm:px-9 h-12 sm:h-[52px] backdrop-blur-sm transition-all duration-300"
           >
-            <a href="#super-shops">Learn More</a>
+            <a href="#quote-form">Fill Quick Form Below</a>
           </Button>
         </motion.div>
 
-        {/* Scroll indicator */}
+        {/* ── Trust badges ── */}
         <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-12 sm:mt-16 flex flex-wrap justify-center gap-x-6 gap-y-3 sm:gap-x-8"
+        >
+          {trustBadges.map((b) => (
+            <span
+              key={b.text}
+              className="inline-flex items-center gap-2 text-white/40 text-xs sm:text-[13px] font-light"
+            >
+              <b.icon className="size-[15px] text-[#D4A017]/70" />
+              {b.text}
+            </span>
+          ))}
+        </motion.div>
+
+        {/* ── Local SEO micro-copy ── */}
+        <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 1 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2"
+          transition={{ delay: 0.9, duration: 1 }}
+          className="mt-10 sm:mt-12 text-[10px] sm:text-[11px] text-white/20 tracking-wide font-light"
         >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-            className="w-5 h-8 rounded-full border-2 border-white/20 flex items-start justify-center p-1.5"
-          >
-            <div className="w-1 h-1.5 rounded-full bg-white/50" />
-          </motion.div>
-        </motion.div>
+          Fresh Daab Dhaka &bull; Bulk Daab Supply Bangladesh &bull; Young Coconut
+          for Super Shops &amp; Corporate Events
+        </motion.p>
       </div>
+
+      {/* ── Scroll indicator ── */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.4, duration: 1 }}
+        className="relative z-10 mt-auto mb-6 sm:mb-8"
+      >
+        <motion.a
+          href="#super-shops"
+          animate={{ y: [0, 6, 0] }}
+          transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
+          className="flex flex-col items-center gap-1.5 text-white/20 hover:text-white/40 transition-colors duration-300"
+          aria-label="Scroll down"
+        >
+          <span className="text-[10px] tracking-[0.2em] uppercase">Scroll</span>
+          <div className="w-4 h-6 rounded-full border border-white/20 flex items-start justify-center pt-1.5">
+            <div className="w-0.5 h-1.5 rounded-full bg-white/40" />
+          </div>
+        </motion.a>
+      </motion.div>
     </section>
   );
 }

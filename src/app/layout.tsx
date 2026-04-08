@@ -9,13 +9,13 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Narkel – Premium Daabs. Ready to Serve.",
+  title: "Fresh Daab | Bulk Young Coconut Supply in Dhaka – Narkel",
   description: "Premium fresh young coconuts in bulk for super shops and corporate events in Dhaka. Direct from Noakhali farms. Modern packaging. Reliable supply.",
   icons: {
     icon: "/favicon.ico",
   },
   openGraph: {
-    title: "Narkel – Premium Daabs. Ready to Serve.",
+    title: "Fresh Daab | Bulk Young Coconut Supply in Dhaka – Narkel",
     description: "Premium fresh young coconuts in bulk for super shops and corporate events in Dhaka.",
     type: "website",
   },
