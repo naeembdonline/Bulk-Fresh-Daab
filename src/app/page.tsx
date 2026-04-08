@@ -43,7 +43,7 @@ import {
 
 const WHATSAPP_NUMBER = "8801515620696";
 const WHATSAPP_QUOTE_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-  "Hi Narkel, I need bulk fresh daab quote for my super shop or corporate event. Quantity:"
+  "Hi Narkel, I need bulk fresh daab for my super shop or corporate event. Please send quote. Quantity:"
 )}`;
 const WHATSAPP_FLOAT_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
   "Hi Narkel, I want bulk fresh daab quote for my business."
@@ -196,9 +196,9 @@ function Navbar() {
 function HeroSection() {
   const trustBadges = [
     { icon: Sprout, text: "From Our Farms" },
-    { icon: Gem, text: "Premium Diamond Cut Packaging" },
-    { icon: Package, text: "Flexible Bulk (12 to 5000+ pcs)" },
+    { icon: Gem, text: "Thailand-style Diamond Cut Packaging" },
     { icon: Truck, text: "Same Day Dhaka Delivery" },
+    { icon: Package, text: "Minimum Order 12 pcs" },
   ];
 
   return (
@@ -206,19 +206,24 @@ function HeroSection() {
       id="home"
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#1A3C34]"
     >
+      {/* ── Background image + stronger overlay ── */}
       <div className="absolute inset-0">
         <img
           src="/images/hero-daab.png"
           alt="Premium packaged diamond-cut fresh daab with plastic wrap and straw in cardboard box – bulk supply Bangladesh"
-          className="absolute inset-0 w-full h-full object-cover object-center opacity-[0.35]"
+          className="absolute inset-0 w-full h-full object-cover object-center opacity-[0.45]"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1A3C34]/50 via-[#1A3C34]/70 to-[#1A3C34]/95" />
+        {/* Stronger gradient for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1A3C34]/60 via-[#1A3C34]/80 to-[#1A3C34]/[0.97]" />
       </div>
 
+      {/* ── Ambient glow orbs ── */}
       <div className="absolute top-1/3 right-[15%] w-[500px] h-[500px] rounded-full bg-[#D4A017]/[0.04] blur-[100px] pointer-events-none" />
       <div className="absolute bottom-1/4 left-[10%] w-[350px] h-[350px] rounded-full bg-white/[0.03] blur-[80px] pointer-events-none" />
 
+      {/* ── Main content ── */}
       <div className="relative z-10 w-full max-w-4xl mx-auto px-5 sm:px-8 lg:px-12 pt-28 sm:pt-32 pb-12 text-center animate-[fadeUp_0.9s_ease_both]">
+        {/* Badge */}
         <div className="animate-[fadeUp_0.9s_ease_0.1s_both]">
           <span className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-white/[0.07] backdrop-blur-md border border-white/[0.08] text-white/60 text-[11px] font-medium tracking-[0.18em] uppercase">
             <span className="w-1.5 h-1.5 rounded-full bg-[#D4A017] animate-pulse" />
@@ -226,22 +231,23 @@ function HeroSection() {
           </span>
         </div>
 
-        <h1 className="mt-7 sm:mt-9 text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] xl:text-[4.75rem] font-bold text-white leading-[1.08] tracking-[-0.02em] animate-[fadeUp_0.9s_ease_0.2s_both]">
-          Fresh Daab{" "}
-          <span className="text-white/30 font-light mx-1">|</span>{" "}
-          <br className="sm:hidden" />
-          <span className="text-[#D4A017]">Bulk Young Coconut</span>{" "}
-          <br className="hidden sm:block" />
-          Supply in Dhaka
+        {/* H1 – conversion-focused */}
+        <h1 className="mt-7 sm:mt-9 text-3xl sm:text-[2.65rem] md:text-5xl lg:text-[3.75rem] xl:text-[4.25rem] font-bold text-white leading-[1.1] tracking-[-0.02em] animate-[fadeUp_0.9s_ease_0.2s_both]">
+          Bulk Fresh Daab for{" "}
+          <span className="text-[#D4A017]">Super Shops</span>
+          {" "}&amp;{" "}
+          <span className="text-[#D4A017]">Corporate Events</span>
         </h1>
 
-        <p className="mt-5 sm:mt-7 text-base sm:text-[17px] lg:text-lg text-white/45 max-w-2xl mx-auto leading-relaxed font-light animate-[fadeUp_0.9s_ease_0.35s_both]">
-          Premium packaged fresh daab straight from our farms. Ready-to-serve
-          for super shops, corporate events &amp; hydration stations across
-          Bangladesh.
+        {/* Subheadline – bullet-point benefits */}
+        <p className="mt-5 sm:mt-7 text-[15px] sm:text-base lg:text-[17px] text-white/50 max-w-2xl mx-auto leading-relaxed font-light animate-[fadeUp_0.9s_ease_0.35s_both]">
+          Premium diamond-cut packaged daab &bull; Same-day Dhaka delivery &bull;{" "}
+          Flexible from 12 pcs &bull; Hygiene-first supply
         </p>
 
+        {/* ── CTAs ── */}
         <div className="mt-9 sm:mt-12 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center animate-[fadeUp_0.9s_ease_0.5s_both]">
+          {/* Primary – WhatsApp */}
           <Button
             asChild
             size="lg"
@@ -253,6 +259,7 @@ function HeroSection() {
             </a>
           </Button>
 
+          {/* Secondary – Scroll to form */}
           <Button
             asChild
             size="lg"
@@ -263,6 +270,7 @@ function HeroSection() {
           </Button>
         </div>
 
+        {/* ── Trust badges with gold icons ── */}
         <div className="mt-12 sm:mt-16 flex flex-wrap justify-center gap-x-6 gap-y-3 sm:gap-x-8 animate-[fadeUp_0.9s_ease_0.65s_both]">
           {trustBadges.map((b) => (
             <span
@@ -275,16 +283,14 @@ function HeroSection() {
           ))}
         </div>
 
-        <p className="mt-6 text-[11px] sm:text-xs text-white/30 tracking-wide font-light animate-[fadeIn_1s_ease_0.8s_both]">
-          From Our Farms &bull; Hygiene First &bull; Same Day Dhaka Delivery
-        </p>
-
-        <p className="mt-4 text-[10px] sm:text-[11px] text-white/20 tracking-wide font-light animate-[fadeIn_1s_ease_1s_both]">
-          Fresh Daab Dhaka &bull; Bulk Daab Supply Bangladesh &bull; Young
-          Coconut for Super Shops &amp; Corporate Events
+        {/* ── Local SEO micro-copy ── */}
+        <p className="mt-10 sm:mt-12 text-[10px] sm:text-[11px] text-white/20 tracking-wide font-light animate-[fadeIn_1s_ease_1s_both]">
+          Fresh Daab Dhaka &bull; Bulk Daab Supply Bangladesh &bull; Young Coconut
+          for Super Shops &amp; Events
         </p>
       </div>
 
+      {/* ── Scroll indicator ── */}
       <div className="relative z-10 mt-auto mb-6 sm:mb-8 animate-[fadeIn_1s_ease_1.5s_both]">
         <a
           href="#super-shops"
