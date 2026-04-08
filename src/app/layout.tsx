@@ -40,6 +40,30 @@ export default function RootLayout({
       <body
         className={`${inter.variable} antialiased bg-background text-foreground`}
       >
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if (typeof IntersectionObserver !== 'undefined') {
+                const observer = new IntersectionObserver(
+                  (entries) => {
+                    entries.forEach((entry) => {
+                      if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                      }
+                    });
+                  },
+                  { threshold: 0.1, rootMargin: '-60px 0px' }
+                );
+                document.addEventListener('DOMContentLoaded', () => {
+                  document.querySelectorAll('.scroll-animate').forEach((el) => {
+                    observer.observe(el);
+                  });
+                });
+              }
+            `,
+          }}
+        />
         {children}
         <Toaster />
       </body>
