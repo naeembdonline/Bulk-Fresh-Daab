@@ -42,7 +42,8 @@ export async function POST(request: NextRequest) {
       },
       { status: 201 }
     );
-  } catch {
+  } catch (error) {
+    console.error("Quote API error:", error);
     return NextResponse.json(
       { success: false, message: "Something went wrong. Please try again." },
       { status: 500 }
