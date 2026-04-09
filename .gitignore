@@ -56,3 +56,4 @@ server.log
 # Database
 db/
 *.db
+.vercel
