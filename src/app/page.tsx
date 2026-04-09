@@ -16,6 +16,7 @@ import {
   MessageCircle,
   Phone,
   MapPin,
+  ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -431,7 +432,7 @@ function CorporateEventsSection() {
                 {[
                   "Branded Setup",
                   "Min. 50 Pcs",
-                  "Same-Day Delivery",
+                  "2-3 Days Advance Booking",
                   "Gold Straws Included",
                 ].map((tag) => (
                   <span
@@ -866,6 +867,74 @@ function QuoteFormSection() {
 }
 
 /* ───────────────────────────────────────────────────────────────
+   FAQ SECTION
+   ─────────────────────────────────────────────────────────────── */
+
+function FAQSection() {
+  const faqs = [
+    {
+      question: "How long does delivery take?",
+      answer:
+        "To ensure farm-fresh quality and precision processing, we require at least 2–3 days advance booking for bulk orders.",
+    },
+    {
+      question: "Where do you deliver?",
+      answer:
+        "We deliver across Dhaka city, focusing on corporate offices, super shops, and events.",
+    },
+    {
+      question: "What is the minimum order quantity?",
+      answer: "Our minimum bulk order starts from 12 pieces.",
+    },
+    {
+      question: "Are the coconuts fresh and hygienic?",
+      answer:
+        "Yes, they are sourced directly from Noakhali farms and processed using premium diamond-cut and vacuum-sealing methods for maximum hygiene.",
+    },
+  ];
+
+  return (
+    <section className="py-24 sm:py-32 lg:py-40 bg-white">
+      <div className="max-w-4xl mx-auto px-5 sm:px-8 lg:px-12">
+        <div className="text-center scroll-animate">
+          <span className="text-[11px] font-semibold text-[#D4A017] tracking-[0.2em] uppercase">
+            FAQ
+          </span>
+          <h2 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1A3C34]">
+            Frequently Asked Questions
+          </h2>
+          <p className="mt-6 text-base sm:text-lg text-[#2C2C2C]/60 font-light max-w-2xl mx-auto">
+            Everything you need to know about our bulk fresh daab service
+          </p>
+        </div>
+
+        <div className="mt-12 sm:mt-16 space-y-4 scroll-animate">
+          {faqs.map((faq, index) => (
+            <details
+              key={index}
+              className="group bg-[#F5F0E8] rounded-2xl overflow-hidden"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <summary className="flex items-center justify-between p-6 cursor-pointer list-none hover:bg-[#1A3C34]/5 transition-all duration-300">
+                <span className="text-base sm:text-lg font-semibold text-[#1A3C34] pr-4">
+                  {faq.question}
+                </span>
+                <ChevronDown className="size-5 text-[#D4A017] flex-shrink-0 group-open:rotate-180 transition-transform duration-300" />
+              </summary>
+              <div className="px-6 pb-6 pt-0">
+                <p className="text-[#2C2C2C]/70 text-sm sm:text-base leading-relaxed">
+                  {faq.answer}
+                </p>
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ───────────────────────────────────────────────────────────────
    FOOTER
    ─────────────────────────────────────────────────────────────── */
 
@@ -973,6 +1042,7 @@ export default function HomePage() {
         <WhyNarkelSection />
         <HowItWorksSection />
         <QuoteFormSection />
+        <FAQSection />
       </main>
       <Footer />
       <FloatingWhatsApp />

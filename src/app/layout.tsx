@@ -78,6 +78,45 @@ export default function RootLayout({
     "priceRange": "৳৳",
   };
 
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How long does delivery take?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "To ensure farm-fresh quality and precision processing, we require at least 2–3 days advance booking for bulk orders.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "Where do you deliver?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We deliver across Dhaka city, focusing on corporate offices, super shops, and events.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "What is the minimum order quantity?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Our minimum bulk order starts from 12 pieces.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "Are the coconuts fresh and hygienic?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, they are sourced directly from Noakhali farms and processed using premium diamond-cut and vacuum-sealing methods for maximum hygiene.",
+        },
+      },
+    ],
+  };
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -86,6 +125,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
         <script
           dangerouslySetInnerHTML={{
