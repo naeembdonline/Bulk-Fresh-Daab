@@ -9,24 +9,52 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title:
-    "Fresh Daab | Bulk Young Coconut Supply Dhaka Bangladesh | Narkel",
+  title: {
+    default: "Narkel — তাজা ডাব ডেলিভারি ঢাকায় | Fresh Coconut Delivery",
+    template: "%s | Narkel",
+  },
   description:
-    "Premium fresh daab (young coconut) bulk supply in Dhaka. Thailand-style diamond cut packaging for super shops and corporate events. From our farms — ready to serve. Get instant quote on WhatsApp.",
+    "ঢাকায় তাজা, হাইজেনিক কাটা ডাব হোম ডেলিভারি। রেস্তোরাঁ, হাসপাতাল ও অফিসে bulk সাপ্লাই। অর্ডার করুন narkel.co তে।",
+  keywords: [
+    "ডাব ডেলিভারি ঢাকা",
+    "fresh coconut delivery Dhaka",
+    "তাজা ডাব",
+    "daab delivery",
+    "narkel",
+    "নারকেল",
+    "coconut supplier Dhaka",
+    "ডাব অর্ডার",
+    "green coconut Bangladesh",
+  ],
+  metadataBase: new URL("https://narkel.co"),
   icons: {
     icon: "/favicon.ico",
   },
   openGraph: {
-    title:
-      "Fresh Daab | Bulk Young Coconut Supply Dhaka Bangladesh | Narkel",
+    title: "Narkel — তাজা ডাব ডেলিভারি ঢাকায় | Fresh Coconut Delivery",
     description:
-      "Premium fresh daab (young coconut) bulk supply in Dhaka. Thailand-style diamond cut packaging for super shops and corporate events. From our farms — ready to serve.",
-    type: "website",
+      "ঢাকায় তাজা, হাইজেনিক কাটা ডাব হোম ডেলিভারি। রেস্তোরাঁ, হাসপাতাল ও অফিসে bulk সাপ্লাই। অর্ডার করুন narkel.co তে।",
+    url: "https://narkel.co",
     siteName: "Narkel",
+    locale: "bn_BD",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
   },
   robots: {
     index: true,
     follow: true,
+  },
+  alternates: {
+    canonical: "https://narkel.co",
   },
 };
 
@@ -35,11 +63,30 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Narkel",
+    "url": "https://narkel.co",
+    "description": "Fresh coconut (daab) delivery in Dhaka, Bangladesh",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Dhaka",
+      "addressCountry": "BD",
+    },
+    "sameAs": ["https://www.facebook.com/narkel"],
+    "priceRange": "৳৳",
+  };
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${inter.variable} antialiased bg-background text-foreground`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
