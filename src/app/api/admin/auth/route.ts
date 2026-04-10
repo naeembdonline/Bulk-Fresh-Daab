@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const { password } = await request.json();
     const adminPassword = process.env.ADMIN_PASSWORD;
-
-    console.log("Login attempt - ADMIN_PASSWORD exists:", !!adminPassword);
 
     if (!adminPassword) {
       console.error("ADMIN_PASSWORD not configured in environment");
@@ -16,15 +16,25 @@ export async function POST(request: NextRequest) {
     }
 
     if (password === adminPassword) {
-      // Set cookie using NextResponse headers
       const response = NextResponse.json({ success: true });
 
+      // Set cookie with proper production-ready configuration
       const isProduction = process.env.NODE_ENV === "production";
-      const cookieValue = `admin_session=authenticated; HttpOnly; Path=/; Max-Age=${60 * 60 * 24}; SameSite=lax${isProduction ? "; Secure" : ""}`;
+      const maxAge = 60 * 60 * 24; // 24 hours
+
+      // Standard cookie format that works across all environments
+      const cookieValue = [
+        `admin_session=authenticated`,
+        `HttpOnly`,
+        `Path=/`,
+        `Max-Age=${maxAge}`,
+        `SameSite=lax`,
+        isProduction ? `Secure` : '',
+      ].filter(Boolean).join('; ');
 
       response.headers.set("Set-Cookie", cookieValue);
+      console.log("Login successful, cookie set");
 
-      console.log("Login successful, cookie set via headers");
       return response;
     }
 
