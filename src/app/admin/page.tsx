@@ -30,13 +30,18 @@ export default function AdminPage() {
 
   const checkAuth = async () => {
     try {
-      const response = await fetch("/api/admin/quotes");
+      const response = await fetch("/api/admin/quotes", {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
+      });
       if (response.ok) {
         setIsAuthenticated(true);
         await fetchQuotes();
       }
     } catch (err) {
-      // Not authenticated
+      console.log("Not authenticated or error:", err);
     } finally {
       setIsLoading(false);
     }
@@ -45,12 +50,22 @@ export default function AdminPage() {
   const fetchQuotes = async () => {
     setIsLoadingQuotes(true);
     try {
-      const response = await fetch("/api/admin/quotes");
+      const response = await fetch("/api/admin/quotes", {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
+      });
       if (response.ok) {
         const data = await response.json();
+        console.log("Frontend: Received quotes:", data.data?.length || 0);
         setQuotes(data.data);
+      } else {
+        console.error("Frontend: Failed to fetch quotes:", response.status);
+        setError("Failed to load quotes");
       }
     } catch (err) {
+      console.error("Frontend: Error fetching quotes:", err);
       setError("Failed to load quotes");
     } finally {
       setIsLoadingQuotes(false);
