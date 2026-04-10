@@ -22,6 +22,7 @@ export default function AdminPage() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [isLoadingQuotes, setIsLoadingQuotes] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   useEffect(() => {
     checkAuth();
@@ -59,6 +60,7 @@ export default function AdminPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setIsLoggingIn(true);
 
     try {
       const response = await fetch("/api/admin/auth", {
@@ -77,6 +79,8 @@ export default function AdminPage() {
       }
     } catch (err) {
       setError("Something went wrong");
+    } finally {
+      setIsLoggingIn(false);
     }
   };
 
@@ -113,12 +117,16 @@ export default function AdminPage() {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString("en-BD", {
+    const date = new Date(dateString);
+    // Convert to GMT+6 (Bangladesh Time)
+    const bdTime = new Date(date.getTime() + (6 * 60 * 60 * 1000));
+    return bdTime.toLocaleString("en-BD", {
       year: "numeric",
       month: "short",
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
+      timeZone: "Asia/Dhaka"
     });
   };
 
@@ -167,9 +175,17 @@ export default function AdminPage() {
 
               <button
                 type="submit"
-                className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 shadow-md hover:shadow-lg"
+                disabled={isLoggingIn}
+                className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                Login
+                {isLoggingIn ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    Logging in...
+                  </>
+                ) : (
+                  "Login"
+                )}
               </button>
             </form>
 
