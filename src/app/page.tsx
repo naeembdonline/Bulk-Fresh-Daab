@@ -17,6 +17,9 @@ import {
   Phone,
   MapPin,
   ChevronDown,
+  Facebook,
+  Mail,
+  Clock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -939,15 +942,72 @@ function FAQSection() {
    ─────────────────────────────────────────────────────────────── */
 
 function Footer() {
+  const currentYear = new Date().getFullYear();
+
+  const footerSections = [
+    {
+      title: "Products",
+      links: [
+        { label: "Diamond Cut Coconut", href: "#why-us" },
+        { label: "Fresh Green Coconut", href: "#why-us" },
+        { label: "Wholesale Supply", href: "#super-shops" },
+      ],
+    },
+    {
+      title: "Services",
+      links: [
+        { label: "Super Shops", href: "#super-shops" },
+        { label: "Corporate Events", href: "#corporates" },
+        { label: "Bulk Orders", href: "#quote-form" },
+      ],
+    },
+    {
+      title: "Company",
+      links: [
+        { label: "Why Narkel", href: "#why-us" },
+        { label: "Contact Us", href: "#quote-form" },
+        { label: "Get Quote", href: "#quote-form" },
+      ],
+    },
+  ];
+
+  const socialLinks = [
+    {
+      name: "Facebook",
+      href: "https://www.facebook.com/narkel",
+      icon: Facebook,
+      color: "hover:bg-[#1877F2]",
+    },
+    {
+      name: "WhatsApp",
+      href: WHATSAPP_FLOAT_URL,
+      icon: MessageCircle,
+      color: "hover:bg-[#25D366]",
+    },
+    {
+      name: "Email",
+      href: "mailto:info@narkel.co",
+      icon: Mail,
+      color: "hover:bg-white/20",
+    },
+  ];
+
+  const contactInfo = [
+    { icon: MapPin, text: "Demra Staff Quarter, Gate No. 4, Dhaka, Bangladesh" },
+    { icon: Clock, text: "Sat-Thu: 8AM - 8PM" },
+    { icon: Phone, text: "+880 1515-620696" },
+  ];
+
   return (
     <footer className="bg-[#1A3C34] text-white">
+      {/* CTA Section */}
       <div className="border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20 text-center scroll-animate">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
-            Ready to order?
+            Ready to order premium coconuts?
           </h2>
           <p className="mt-3 text-sm text-white/40 font-light">
-            Get your bulk quote in under 2 minutes.
+            Get your bulk quote in under 2 minutes. Farm-fresh, hygienic, diamond-cut delivery.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
             <Button
@@ -973,56 +1033,127 @@ function Footer() {
         </div>
       </div>
 
+      {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-12 sm:py-16">
-        <div className="flex flex-col items-center text-center">
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-full bg-[#D4A017] flex items-center justify-center">
-              <TreePine className="size-3.5 text-white" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
+          {/* Brand Column */}
+          <div className="lg:col-span-2">
+            <div className="flex items-center gap-2.5 mb-4">
+              <div className="w-10 h-10 rounded-full bg-[#D4A017] flex items-center justify-center">
+                <TreePine className="size-5 text-white" />
+              </div>
+              <div>
+                <span className="text-xl font-bold tracking-[0.18em]">NARKEL</span>
+                <p className="text-xs text-white/40">Premium Coconut Supplier</p>
+              </div>
             </div>
-            <span className="text-xl font-bold tracking-[0.18em]">NARKEL</span>
-          </div>
-
-          <nav className="flex flex-wrap justify-center gap-6 sm:gap-8 mt-8" aria-label="Footer navigation">
-            {[
-              { label: "Super Shops", href: "#super-shops" },
-              { label: "Corporate Events", href: "#corporates" },
-              { label: "Why Narkel", href: "#why-us" },
-              { label: "Get Quote", href: "#quote-form" },
-            ].map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                className="text-sm text-white/40 hover:text-white/70 transition-colors duration-300"
-              >
-                {l.label}
-              </a>
-            ))}
-          </nav>
-
-          <div className="flex flex-wrap justify-center gap-6 mt-8 text-xs text-white/30">
-            <a
-              href={WHATSAPP_FLOAT_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 hover:text-white/50 transition-colors duration-300"
-            >
-              <Phone className="size-3" />
-              WhatsApp
-            </a>
-            <span className="flex items-center gap-1.5">
-              <MapPin className="size-3" />
-              Dhaka, Bangladesh
-            </span>
-          </div>
-
-          <div className="mt-10 pt-8 border-t border-white/[0.06] w-full">
-            <p className="text-xs text-white/25">
-              narkel.co &copy; {new Date().getFullYear()} &mdash; Premium Fresh
-              Daab Supply Bangladesh
+            <p className="text-sm text-white/60 leading-relaxed mb-6">
+              Bangladesh's leading wholesale supplier of fresh green coconuts and premium Diamond Cut coconuts.
+              Farm-fresh quality, hygienic processing, and reliable delivery across Dhaka and nationwide.
             </p>
+
+            {/* Social Links */}
+            <div className="flex gap-3">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`w-10 h-10 rounded-full bg-white/5 flex items-center justify-center transition-all duration-300 ${social.color} hover:bg-white/10`}
+                  aria-label={social.name}
+                >
+                  <social.icon className="size-4" />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Footer Sections */}
+          {footerSections.map((section) => (
+            <div key={section.title}>
+              <h3 className="text-sm font-semibold text-white mb-4">{section.title}</h3>
+              <ul className="space-y-3">
+                {section.links.map((link) => (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      className="text-sm text-white/40 hover:text-white/70 transition-colors duration-300"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {/* Contact Information */}
+        <div className="mt-12 pt-8 border-t border-white/[0.06]">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {contactInfo.map((info, index) => (
+              <div key={index} className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                  <info.icon className="size-4 text-white/60" />
+                </div>
+                <div>
+                  <p className="text-sm text-white/60">{info.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="mt-10 pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-xs text-white/25">
+            © {currentYear} Narkel.co &mdash; Premium Wholesale Coconut Supplier Bangladesh
+          </p>
+          <div className="flex gap-6 text-xs text-white/30">
+            <a href="#privacy" className="hover:text-white/50 transition-colors">
+              Privacy Policy
+            </a>
+            <a href="#terms" className="hover:text-white/50 transition-colors">
+              Terms of Service
+            </a>
           </div>
         </div>
       </div>
+
+      {/* Schema.org Location Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "name": "Narkel",
+            "image": "https://narkel.co/og-image.jpg",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Demra Staff Quarter, Gate No. 4",
+              "addressLocality": "Dhaka",
+              "addressRegion": "Dhaka",
+              "addressCountry": "BD",
+            },
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": "23.6992",
+              "longitude": "90.4326",
+            },
+            "url": "https://narkel.co",
+            "telephone": "+8801515620696",
+            "openingHoursSpecification": {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+              "opens": "08:00",
+              "closes": "20:00",
+            },
+            "sameAs": ["https://www.facebook.com/narkel"],
+          }),
+        }}
+      />
     </footer>
   );
 }

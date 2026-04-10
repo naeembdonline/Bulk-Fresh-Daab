@@ -1,3 +1,19 @@
+# Robots.txt for Narkel.co
+# Premium Wholesale Coconut Supplier in Bangladesh
+
+# Allow all search engines
+User-agent: *
+Allow: /
+Crawl-delay: 1
+
+# Disallow admin routes
+Disallow: /admin
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://narkel.co/sitemap.xml
+
+# Specific bot configurations
 User-agent: Googlebot
 Allow: /
 
@@ -9,8 +25,26 @@ Allow: /
 
 User-agent: facebookexternalhit
 Allow: /
+Allow: /images/
 
-User-agent: *
+User-agent: LinkedInBot
 Allow: /
 
-Sitemap: https://narkel.co/sitemap.xml
+User-agent: WhatsApp
+Allow: /
+
+# Social media and AI crawlers
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
