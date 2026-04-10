@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,17 +16,16 @@ export async function POST(request: NextRequest) {
     }
 
     if (password === adminPassword) {
-      const cookieStore = cookies();
-      cookieStore.set("admin_session", "authenticated", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24, // 24 hours
-        path: "/",
-      });
+      // Set cookie using NextResponse headers
+      const response = NextResponse.json({ success: true });
 
-      console.log("Login successful, cookie set");
-      return NextResponse.json({ success: true });
+      const isProduction = process.env.NODE_ENV === "production";
+      const cookieValue = `admin_session=authenticated; HttpOnly; Path=/; Max-Age=${60 * 60 * 24}; SameSite=lax${isProduction ? "; Secure" : ""}`;
+
+      response.headers.set("Set-Cookie", cookieValue);
+
+      console.log("Login successful, cookie set via headers");
+      return response;
     }
 
     console.log("Login failed: invalid password");
