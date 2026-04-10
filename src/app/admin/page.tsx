@@ -32,6 +32,7 @@ export default function AdminPage() {
     try {
       const response = await fetch("/api/admin/quotes", {
         cache: 'no-store',
+        credentials: 'include',
         headers: {
           'Cache-Control': 'no-cache',
         },
@@ -52,6 +53,7 @@ export default function AdminPage() {
     try {
       const response = await fetch("/api/admin/quotes", {
         cache: 'no-store',
+        credentials: 'include',
         headers: {
           'Cache-Control': 'no-cache',
         },
@@ -80,6 +82,7 @@ export default function AdminPage() {
     try {
       const response = await fetch("/api/admin/auth", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
       });
@@ -101,7 +104,10 @@ export default function AdminPage() {
 
   const handleLogout = async () => {
     try {
-      await fetch("/api/admin/logout", { method: "POST" });
+      await fetch("/api/admin/logout", {
+        method: "POST",
+        credentials: 'include',
+      });
       setIsAuthenticated(false);
       setQuotes([]);
       setPassword("");
@@ -117,6 +123,7 @@ export default function AdminPage() {
     try {
       const response = await fetch(`/api/admin/quotes/${id}`, {
         method: "DELETE",
+        credentials: 'include',
       });
 
       if (response.ok) {
